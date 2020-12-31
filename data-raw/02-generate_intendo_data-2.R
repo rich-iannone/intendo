@@ -702,3 +702,5 @@ revenue_tbl <-
   dplyr::bind_rows(session_iap_tbl, session_ads_tbl) %>%
   dplyr::arrange(session_start, session_id) %>%
   dplyr::select(player_id, session_id, type, item, revenue, dplyr::everything())
+
+saveRDS(revenue_tbl, file = "data-raw/process_data/revenue_tbl.rds")
