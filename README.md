@@ -4,7 +4,6 @@
 # intendo
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The **intendo** package is primarily a dataset package, with three
@@ -13,7 +12,7 @@ mobile game.
 
 ## Installation
 
-You can install the development version of \*\*intendo\* from
+You can install the development version of **intendo** from
 [GitHub](https://github.com/) with:
 
 ``` r

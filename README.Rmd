@@ -22,7 +22,7 @@ The **intendo** package is primarily a dataset package, with three datasets avai
 
 ## Installation
 
-You can install the development version of **intendo* from [GitHub](https://github.com/) with:
+You can install the development version of **intendo** from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
