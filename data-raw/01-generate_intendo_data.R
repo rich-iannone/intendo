@@ -624,6 +624,14 @@ ad_rev <- function(item) {
   sample(ad_revenue_list[[item]], 1)
 }
 
+device_type <- function(device_q) {
+
+  if (device_q == 3) idx <- 1
+  if (device_q == 5) idx <- 2
+  if (device_q == 7) idx <- 3
+
+  sample(device_list[[idx]], size = 1)
+}
 
 #
 # Generate the tables
@@ -650,6 +658,7 @@ player_tbl <-
   )
 
 saveRDS(player_tbl, file = "data-raw/zzz-process_data/player_tbl_12410.rds")
+
 
 # Build the sessions
 for (i in 0:(ceiling(nrow(player_tbl) / 1000) - 1 )) {
@@ -761,8 +770,6 @@ session_ads_tbl <-
   ) %>%
   dplyr::arrange(session_start, time)
 
-
-
 session_revenue_tbl <-
   revenue_tbl %>%
   dplyr::select(
@@ -873,6 +880,30 @@ all_revenue <-
     item_revenue = revenue
   )
 
+# Create the `user_summary` table
+user_summary <-
+  raw_session_tbl %>%
+  dplyr::select(
+    player_id, session_start, start_day,
+    country, acquisition, device_q
+  ) %>%
+  dplyr::group_by(player_id) %>%
+  dplyr::summarize(
+    first_login = min(session_start, na.rm = TRUE),
+    start_day = min(start_day, na.rm = TRUE),
+    country = unique(country),
+    acquisition = unique(acquisition),
+    device_q = min(device_q, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(device_name = device_type(device_q = device_q)) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(-device_q) %>%
+  dplyr::arrange(first_login)
+
 saveRDS(all_sessions, file = "data-raw/all_sessions.rds")
 saveRDS(users_daily, file = "data-raw/users_daily.rds")
 saveRDS(all_revenue, file = "data-raw/all_revenue.rds")
+saveRDS(user_summary, file = "data-raw/user_summary.rds")
