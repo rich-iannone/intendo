@@ -659,7 +659,6 @@ player_tbl <-
 
 saveRDS(player_tbl, file = "data-raw/zzz-process_data/player_tbl_12410.rds")
 
-
 # Build the sessions
 for (i in 0:(ceiling(nrow(player_tbl) / 1000) - 1 )) {
 
@@ -702,7 +701,8 @@ raw_session_tbl <-
   dplyr::mutate(n_spends = n_spends(spend_p = spend_p, session_duration = session_duration)) %>%
   dplyr::mutate(n_ads = n_ads(session_duration = session_duration)) %>%
   dplyr::select(-c(p_curve, n_days, stop_p, end_p)) %>%
-  dplyr::ungroup()
+  dplyr::ungroup() %>%
+  dplyr::filter(session_start < lubridate::ymd_hms("2016-01-01 00:00:00"))
 
 session_iap_tbl <-
   raw_session_tbl %>%
@@ -737,7 +737,8 @@ session_iap_tbl <-
     type, item, revenue, session_duration,
     start_day, acquisition, country
   ) %>%
-  dplyr::arrange(session_start, time)
+  dplyr::arrange(session_start, time) %>%
+  dplyr::filter(time < lubridate::ymd_hms("2016-01-01 00:00:00"))
 
 session_ads_tbl <-
   raw_session_tbl %>%
@@ -768,26 +769,40 @@ session_ads_tbl <-
     type, item, revenue, session_duration,
     start_day, acquisition, country
   ) %>%
-  dplyr::arrange(session_start, time)
+  dplyr::arrange(session_start, time) %>%
+  dplyr::filter(time < lubridate::ymd_hms("2016-01-01 00:00:00"))
+
+# Create the `all_revenue` table
+all_revenue <-
+  dplyr::bind_rows(session_iap_tbl, session_ads_tbl) %>%
+  dplyr::arrange(session_start, session_id, time) %>%
+  dplyr::rename(
+    item_type = type,
+    item_name = item,
+    item_revenue = revenue
+  )
 
 session_revenue_tbl <-
-  revenue_tbl %>%
+  all_revenue %>%
   dplyr::select(
     player_id, session_id, session_start,
-    session_duration, type, revenue
+    session_duration, item_type, item_revenue
   ) %>%
   dplyr::mutate(row = row_number()) %>%
   tidyr::pivot_wider(
-    names_from = type,
-    values_from = revenue
+    names_from = item_type,
+    values_from = item_revenue
   ) %>%
   dplyr::select(-row) %>%
+  dplyr::mutate(ad = ifelse(is.na(ad), 0, ad)) %>%
+  dplyr::mutate(iap = ifelse(is.na(iap), 0, iap)) %>%
   dplyr::group_by(player_id, session_id, session_start, session_duration) %>%
   dplyr::summarize(
     ad_revenue = sum(ad, na.rm = TRUE),
     iap_revenue = sum(iap, na.rm = TRUE),
     .groups = "drop"
-  )
+  ) %>%
+  dplyr::arrange(session_start)
 
 # Create the `all_sessions` table
 all_sessions <-
@@ -821,8 +836,8 @@ users_daily <-
   ) %>%
   dplyr::mutate(login_date = lubridate::as_date(session_start)) %>%
   dplyr::left_join(
-    session_tbl %>%
-      dplyr::select(session_id, dplyr::ends_with("revenue")),
+    all_sessions %>%
+      dplyr::select(session_id, dplyr::starts_with("rev")),
     by = "session_id"
   ) %>%
   dplyr::group_by(player_id, login_date) %>%
@@ -835,9 +850,9 @@ users_daily <-
     ability = unique(ability),
     n_iap_day = sum(n_spends, na.rm = TRUE),
     n_ads_day = sum(n_ads, na.rm = TRUE),
-    rev_iap_day = sum(iap_revenue, na.rm = TRUE),
-    rev_ads_day = sum(ad_revenue, na.rm = TRUE),
-    rev_all_day = sum(total_revenue, na.rm = TRUE),
+    rev_iap_day = sum(rev_iap, na.rm = TRUE),
+    rev_ads_day = sum(rev_ads, na.rm = TRUE),
+    rev_all_day = sum(rev_all, na.rm = TRUE),
     .groups = "drop"
   ) %>%
   dplyr::arrange(login_date, player_id) %>%
@@ -868,16 +883,6 @@ users_daily <-
     n_iap_total, n_ads_total,
     rev_iap_total, rev_ads_total, rev_all_total,
     country, acquisition
-  )
-
-# Create the `all_revenue` table
-all_revenue <-
-  dplyr::bind_rows(session_iap_tbl, session_ads_tbl) %>%
-  dplyr::arrange(session_start, session_id, time) %>%
-  dplyr::rename(
-    item_type = type,
-    item_name = item,
-    item_revenue = revenue
   )
 
 # Create the `user_summary` table
