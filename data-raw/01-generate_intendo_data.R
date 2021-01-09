@@ -196,7 +196,7 @@ levels_effort <-
   dplyr::mutate(
     hours = hours +
       sample((-3:3), 1, prob = c(0.05, 0.05, 0.1, 0.1, 0.2, 0.2, 0.3))/10
-    ) %>%
+  ) %>%
   dplyr::ungroup() %>%
   dplyr::add_row(level = 0, hours = 0, .before = 1) %>%
   dplyr::mutate(hours = ifelse(level == 1, 0.2, hours)) %>%
@@ -211,13 +211,14 @@ levels_effort <-
   dplyr::mutate(hours_02 = hours_10 * 1.25) %>%
   dplyr::mutate(hours_01 = hours_10 * 1.50) %>%
   dplyr::select(-hours) %>%
-  tidyr::pivot_longer(cols = starts_with("hours"),
-    names_to = "ability", names_prefix = "hours_",
+  tidyr::pivot_longer(
+    cols = starts_with("hours"),
+    names_to = "ability",
+    names_prefix = "hours_",
     values_to = "hours"
   ) %>%
   dplyr::mutate(minutes = hours * 60) %>%
   dplyr::mutate(ability = as.numeric(ability))
-
 
 get_level_at <- function(time_played, ability) {
 
@@ -291,7 +292,7 @@ create_players <- function(start_day,
       age >= 31 ~ sample(device_q_vec, size = 1, prob = c(.4, .3, .3)),
       age >= 17 ~ sample(device_q_vec, size = 1, prob = c(.5, .3, .2)),
       age >= 10 ~ sample(device_q_vec, size = 1, prob = c(.1, .6, .3)),
-           TRUE ~ sample(device_q_vec, size = 1, prob = c(.1, .3, .6))
+      TRUE ~ sample(device_q_vec, size = 1, prob = c(.1, .3, .6))
     )
 
   device <-
@@ -495,7 +496,12 @@ player_sessions <- function(player_tbl, i) {
     sessions <- numeric(5)
 
     for (k in seq(p_curve_k)) {
-      sessions[k] <- sample(c(1, 0), size = 1, prob = c(abs(p_curve_k[k]), abs(1 - p_curve_k[k])))
+      sessions[k] <-
+        sample(
+          c(1, 0),
+          size = 1,
+          prob = c(abs(p_curve_k[k]), abs(1 - p_curve_k[k]))
+        )
     }
 
     n_sessions <- sum(sessions)
@@ -504,7 +510,12 @@ player_sessions <- function(player_tbl, i) {
 
     session_starts <- get_times(n_sessions, dates[j])
     durations <- replicate(n_sessions, sample(3:40, 1) + sample(1:10/10, 1))
-    session_ids <- replicate(n_sessions, paste0(player_id, "-", paste(sample(c(letters, 1:9), 8), collapse = "")))
+
+    session_ids <-
+      replicate(
+        n_sessions,
+        paste0(player_id, "-", paste(sample(c(letters, 1:9), 8), collapse = ""))
+      )
 
     session_tbl <-
       bind_rows(
@@ -537,14 +548,14 @@ n_spends <- function(spend_p,
   if (session_duration < 10) {
     # If the session is less than 10 minutes in duration, penalize the
     # likelihood of spending anything with a die toss
-    short_session_no_spend <-
-      sample(x = c(0, 1), size = 1, prob = c(0.5, 0.5))
+    short_session_no_spend <- sample(x = c(0, 1), size = 1, prob = c(0.5, 0.5))
 
     if (short_session_no_spend == 1) return(0L)
   }
 
   spend_counter <- 0
   p_multiplier <- 1
+
   for (i in 1:10) {
 
     effective_spend_p <- spend_p * p_multiplier
@@ -638,7 +649,8 @@ device_type <- function(device_q) {
 #
 
 # Define the dates where there are new player logins
-dates_new_players <- seq(as.Date("2015-01-01"), as.Date("2015-12-31"), by = 1)
+dates_new_players <-
+  seq(as.Date("2015-01-01"), as.Date("2015-12-31"), by = 1)
 
 player_tbl <-
   dplyr::bind_rows(
@@ -657,7 +669,10 @@ player_tbl <-
     )
   )
 
-saveRDS(player_tbl, file = "data-raw/zzz-process_data/player_tbl_12410.rds")
+saveRDS(
+  player_tbl,
+  file = "data-raw/zzz-process_data/player_tbl_complete.rds"
+)
 
 # Build the sessions
 for (i in 0:(ceiling(nrow(player_tbl) / 1000) - 1 )) {
