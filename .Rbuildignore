@@ -1,4 +1,5 @@
 ^data-raw$
+^data-large$
 ^LICENSE\.md$
 ^README\.Rmd$
 ^.*\.Rproj$
