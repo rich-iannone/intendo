@@ -4,10 +4,10 @@ library(lubridate)
 # Set a seed
 set.seed(23)
 
-users_daily <- readRDS("data-raw/users_daily.rds")
-all_revenue <- readRDS("data-raw/all_revenue.rds")
-all_sessions <- readRDS("data-raw/all_sessions.rds")
-user_summary <- readRDS("data-raw/user_summary.rds")
+users_daily <- readRDS("data-raw/users_daily_large.rds")
+all_revenue <- readRDS("data-raw/all_revenue_large.rds")
+all_sessions <- readRDS("data-raw/all_sessions_large.rds")
+user_summary <- readRDS("data-raw/user_summary_large.rds")
 
 users_daily_small <- readRDS("data-raw/users_daily_small.rds")
 all_revenue_small <- readRDS("data-raw/all_revenue_small.rds")
@@ -457,10 +457,10 @@ user_summary_small_f <-
   create_user_summary_f(user_summary = user_summary_small)
 
 
-saveRDS(users_daily_f, file = "data-raw/users_daily_f.rds")
-saveRDS(all_revenue_f, file = "data-raw/all_revenue_f.rds")
-saveRDS(all_sessions_f, file = "data-raw/all_sessions_f.rds")
-saveRDS(user_summary_f, file = "data-raw/user_summary_f.rds")
+saveRDS(users_daily_f, file = "data-raw/users_daily_large_f.rds")
+saveRDS(all_revenue_f, file = "data-raw/all_revenue_large_f.rds")
+saveRDS(all_sessions_f, file = "data-raw/all_sessions_large_f.rds")
+saveRDS(user_summary_f, file = "data-raw/user_summary_large_f.rds")
 
 saveRDS(users_daily_small_f, file = "data-raw/users_daily_small_f.rds")
 saveRDS(all_revenue_small_f, file = "data-raw/all_revenue_small_f.rds")

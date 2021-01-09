@@ -923,7 +923,7 @@ user_summary <-
   dplyr::select(-device_q) %>%
   dplyr::arrange(first_login)
 
-saveRDS(all_sessions, file = "data-raw/all_sessions.rds")
-saveRDS(users_daily, file = "data-raw/users_daily.rds")
-saveRDS(all_revenue, file = "data-raw/all_revenue.rds")
-saveRDS(user_summary, file = "data-raw/user_summary.rds")
+saveRDS(all_sessions, file = "data-raw/all_sessions_large.rds")
+saveRDS(users_daily, file = "data-raw/users_daily_large.rds")
+saveRDS(all_revenue, file = "data-raw/all_revenue_large.rds")
+saveRDS(user_summary, file = "data-raw/user_summary_large.rds")

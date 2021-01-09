@@ -3,10 +3,10 @@ library(tidyverse)
 # Set a seed
 set.seed(23)
 
-users_daily_small <- readRDS("data-raw/users_daily.rds")
-all_revenue_small <- readRDS("data-raw/all_revenue.rds")
-all_sessions_small <- readRDS("data-raw/all_sessions.rds")
-user_summary_small <- readRDS("data-raw/user_summary.rds")
+users_daily_small <- readRDS("data-raw/users_daily_large.rds")
+all_revenue_small <- readRDS("data-raw/all_revenue_large.rds")
+all_sessions_small <- readRDS("data-raw/all_sessions_large.rds")
+user_summary_small <- readRDS("data-raw/user_summary_large.rds")
 
 users_basis <-
   user_summary_small %>%
