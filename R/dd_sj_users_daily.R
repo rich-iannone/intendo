@@ -1,8 +1,8 @@
 #' Data Dictionary: sj_users_daily
 #'
 #' The `dd_sj_users_daily()` function generates a data dictionary based on the
-#' `sj_users_daily` dataset, which is available in the **intendo** package as
-#' a dataset.
+#' `sj_users_daily` table, which is available in the **intendo** package as a
+#' dataset.
 #'
 #' @export
 dd_sj_users_daily <- function() {
