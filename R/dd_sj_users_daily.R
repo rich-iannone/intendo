@@ -111,7 +111,7 @@ dd_sj_users_daily <- function() {
     columns = "start_day",
     info = "The day that the player was first seen (the first login day).",
     details = "When taking the difference in days between `login_date` and
-    `start_day` we get the player age, which is important for cohorting metric
+    `start_day` we get the player age, which is important for cohorting metrics
     and segmentation."
   ) %>%
   pointblank::info_columns(
@@ -218,6 +218,8 @@ dd_sj_users_daily <- function() {
       " - (2015-06-29) added the `level_reached` column."
     )
   ) %>%
-  pointblank::get_informant_report(title = "Data Dictionary: `sj_users_daily`")
+  pointblank::get_informant_report(
+    title = "Data Dictionary: `sj_users_daily`"
+  )
 }
 
