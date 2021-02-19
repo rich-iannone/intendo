@@ -8,6 +8,6 @@ dd_sj_users_daily()
 }
 \description{
 The \code{dd_sj_users_daily()} function generates a data dictionary based on the
-\code{sj_users_daily} dataset, which is available in the \strong{intendo} package as
-a dataset.
+\code{sj_users_daily} table, which is available in the \strong{intendo} package as a
+dataset.
 }
