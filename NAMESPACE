@@ -3,5 +3,6 @@
 export("%>%")
 export(dd_sj_all_revenue)
 export(dd_sj_all_sessions)
+export(dd_sj_user_summary)
 export(dd_sj_users_daily)
 importFrom(magrittr,"%>%")
