@@ -9,54 +9,54 @@ dd_sj_all_revenue <- function() {
 
   pointblank::create_informant(
     read_fn = ~ sj_all_revenue,
-    label = "Daily users playing Super Jetroid",
+    label = "All revenue events for *Super Jetroid*",
     tbl_name = "sj_all_revenue"
   ) %>%
     pointblank::info_tabular(
       summary = "This summary table provides revenue data for every in-app
-    purchase and ad view captured by our instrumentation in Super Jetroid.
-    Details about the timing of the revenue event (`session_start` and
-    `time` of earned revenue) are provided along with identifiers for the
-    revenue source and some metadata for the player for segmentation
-    purposes.",
+      purchase and ad view captured by our instrumentation in Super Jetroid.
+      Details about the timing of the revenue event (`session_start` and
+      `time` of earned revenue) are provided along with identifiers for the
+      revenue source and some metadata for the player for segmentation
+      purposes.",
       `each row is` = "A discrete revenue event for a player in a session.
-    Details about the revenue source are provided for both IAPs and ad
-    views. Some values intrinsic to the player (e.g., `country`) are
-    provided for sake of convenience.",
+      Details about the revenue source are provided for both IAPs and ad
+      views. Some values intrinsic to the player (e.g., `country`) are
+      provided for sake of convenience.",
       `data production` = "This table that is created three times a day
-    at set times. The data for advertising events is delayed by three days
-    because such information is pulled from our three advertising partners but
-    one of them requires the extra time to have the revenue information
-    available. Please visit our internal *Intendo* website to view status
-    reports on delayed data. Data providers for IAPs occasionally revise the
-    revenue amounts and adjust for refunds, so, revenue amounts can vary
-    somewhat for up to 20 days back from the present day.",
+      at set times. The data for advertising events is delayed by three days
+      because such information is pulled from our three advertising partners but
+      one of them requires the extra time to have the revenue information
+      available. Please visit our internal *Intendo* website to view status
+      reports on delayed data. Data providers for IAPs occasionally revise the
+      revenue amounts and adjust for refunds, so, revenue amounts can vary
+      somewhat for up to 20 days back from the present day.",
       `person responsible` = "C. Ellefson: +1 (905) 329-3702,
-    Central Engineering (((Toronto Downtown office)))"
+      Central Engineering (((Toronto Downtown office)))"
     ) %>%
     pointblank::info_columns(
       columns = "player_id",
       info = "This is a unique identifier for a user/player.",
       details = "Always composed of 12 *uppercase* letters followed
-    by 3 digits."
+      by 3 digits."
     ) %>%
     pointblank::info_columns(
       columns = "session_id",
       info = "The date (in the [[YYYY-MM-DD]]<<color: steelblue;>> format)
-    that a player (with a `player_id`) logged into the game for *any amount
-    of time*. Since this is a daily summary by player we expect dates and
-    *not* date-time values.",
-    details = "Note that dates are based on UTC time and not the player's
-    local time. Also, sessions that carry on to the next day (in UTC time,
-    again) are not double counted."
+      that a player (with a `player_id`) logged into the game for *any amount
+      of time*. Since this is a daily summary by player we expect dates and
+      *not* date-time values.",
+      details = "Note that dates are based on UTC time and not the player's
+      local time. Also, sessions that carry on to the next day (in UTC time,
+      again) are not double counted."
     ) %>%
     pointblank::info_columns(
       columns = "session_start",
       info = "The starting time of the session in which a revenue event
-    occurred. This is a datetime value (in the [[YYYY-MM-DD hh-mm-ss]]
-    <<color: steelblue;>> format) for when a player (with a `player_id`)
-    logged into the game and is associated with a session that had at least
-    one revenue event.",
+      occurred. This is a datetime value (in the [[YYYY-MM-DD hh-mm-ss]]
+      <<color: steelblue;>> format) for when a player (with a `player_id`)
+      logged into the game and is associated with a session that had at least
+      one revenue event.",
       details = ""
     ) %>%
     pointblank::info_columns(
@@ -104,8 +104,8 @@ dd_sj_all_revenue <- function() {
       columns = "start_day",
       info = "The day that the player was first seen (the first login day).",
       details = "When taking the difference in days between `session_start` and
-    `start_day` we get the player age, which is important for cohorting metrics
-    and segmentation."
+      `start_day` we get the player age, which is important for cohorting
+      metrics and segmentation."
     ) %>%
     pointblank::info_columns(
       columns = "acquisition",
@@ -113,9 +113,9 @@ dd_sj_all_revenue <- function() {
     ) %>%
     pointblank::info_columns(
       columns = "country",
-      info = "The country of the player. This location information is captured at
-    first login and doesn't account for sessions/purchases in other countries
-    though incidence of that must be rare."
+      info = "The country of the player. This location information is captured
+      at first login and doesn't account for sessions/purchases in other
+      countries though incidence of that must be rare."
     ) %>%
     pointblank::info_section(
       section_name = "Futher Details",
@@ -127,8 +127,8 @@ dd_sj_all_revenue <- function() {
         " - (2015-02-05) added the `acquisition` and `country` columns."
       )
     ) %>%
+    pointblank::incorporate() %>%
     pointblank::get_informant_report(
       title = "Data Dictionary: `sj_all_revenue`"
     )
 }
-
