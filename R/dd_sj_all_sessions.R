@@ -9,7 +9,7 @@ dd_sj_all_sessions <- function() {
 
   pointblank::create_informant(
     read_fn = ~ sj_all_sessions,
-    label = "All player sessions from Super Jetroid",
+    label = "All player sessions from *Super Jetroid*",
     tbl_name = "sj_all_sessions"
   ) %>%
     pointblank::info_tabular(
@@ -103,6 +103,7 @@ dd_sj_all_sessions <- function() {
       `time of updates` = "Continuously updated",
       `inception` = "2014-12-12"
     ) %>%
+    pointblank::incorporate() %>%
     pointblank::get_informant_report(
       title = "Data Dictionary: `sj_all_sessions`"
     )
