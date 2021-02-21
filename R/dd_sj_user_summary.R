@@ -9,7 +9,7 @@ dd_sj_user_summary <- function() {
 
   pointblank::create_informant(
     read_fn = ~ sj_user_summary,
-    label = "Current summary of all users playing Super Jetroid",
+    label = "Summary of important player activity in *Super Jetroid*",
     tbl_name = "sj_user_summary"
   ) %>%
     pointblank::info_tabular(
@@ -19,27 +19,25 @@ dd_sj_user_summary <- function() {
       can be done). We get information here such as the first login time and
       some information useful for segmentation (`country`, `acquisition`, and
       `device_name`)",
-    `each row is` = "A summary for a given player at a given date, and, the
-    row is only produced if the player has a session on the date in question.
-    Some summarized values are for the date in question (`_day`) and some are
-    all days up to the given date (`_total`). Some values are intrinsic to
-    the player (e.g., `country`) and repeated for all instances of the player
-    for sake of convenience.",
-    `data production` = "This table that is created
-    nightly in a pipeline run. The data lags by two days because
-    revenue information from **App Annie** is delayed by reporting
-    from **Apple** and **Google**. Please visit our internal *Intendo*
-    website for status reporting. Data providers occasionally revise
-    the revenue amounts and adjust for refunds, so, revenue amounts
-    can vary a little up to 20 days back from the present day.",
-    `person responsible` = "E. Burrows: +1 (416) 329-2462,
-    Central Engineering (((Toronto Downtown office)))"
+      `each row is` = "A summary for a given player at a given date, and, the
+      row is only produced if the player has a session on the date in question.
+      Some summarized values are for the date in question (`_day`) and some are
+      all days up to the given date (`_total`). Some values are intrinsic to
+      the player (e.g., `country`) and repeated for all instances of the player
+      for sake of convenience.",
+      `data production` = "This table that is created
+      nightly in a pipeline run. Please visit our internal *Intendo*
+      website for status reporting. Data providers occasionally revise
+      the revenue amounts and adjust for refunds, so, revenue amounts
+      can vary a little up to 20 days back from the present day.",
+      `person responsible` = "E. Burrows: +1 (416) 329-2462,
+      Central Engineering (((Toronto Downtown office)))"
     ) %>%
     pointblank::info_columns(
       columns = "player_id",
       info = "This is a unique identifier for a user/player.",
-      details = "Always composed of 12 *uppercase* letters followed
-    by 3 digits."
+      details = "Always composed of 12 *uppercase* letters followed by 3
+      digits."
     ) %>%
     pointblank::info_columns(
       columns = "first_login",
@@ -54,14 +52,14 @@ dd_sj_user_summary <- function() {
       columns = "start_day",
       info = "The day that the player was first seen (the first login day).",
       details = "When taking the difference in days between `session_start` and
-    `start_day` we get the player age, which is important for cohorting metrics
-    and segmentation."
+      `start_day` we get the player age, which is important for cohorting
+      metrics and segmentation."
     ) %>%
     pointblank::info_columns(
       columns = "country",
-      info = "The country of the player. This location information is captured at
-    first login and doesn't account for sessions/purchases in other countries
-    though incidence of that must be rare."
+      info = "The country of the player. This location information is captured
+      at first login and doesn't account for sessions/purchases in other
+      countries though incidence of that must be rare."
     ) %>%
     pointblank::info_columns(
       columns = "acquisition",
@@ -74,17 +72,12 @@ dd_sj_user_summary <- function() {
     ) %>%
     pointblank::info_section(
       section_name = "Futher Details",
-      frequency = "Daily",
-      `time of updates` = "Generally between 09:00 and 10:00 UTC",
-      `inception` = "2015-01-23",
-      revisions = c(
-        " - (2015-01-25) added the `country` and `acquisition` columns.",
-        " - (2015-03-16) incorporated backfilling of IAP amounts.",
-        " - (2015-05-09) improved the reporting of the `device_name`."
-      )
+      frequency = "Continuously updated",
+      `time of updates` = "Continuously updated",
+      `inception` = "2014-12-12"
     ) %>%
+    pointblank::incorporate() %>%
     pointblank::get_informant_report(
-      title = "Data Dictionary: `sj_user_summary`"
+      title = "Data Dictionary: `sj_all_sessions`"
     )
 }
-
