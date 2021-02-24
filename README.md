@@ -13,7 +13,15 @@ of those datasets. Just totally riddled with all sorts of data problems. We call
 As it turns out, this is great. You can choose to practice your data skills with 100% 
 Grade A data that conforms to the highest standards of data cleanliness, or, you can
 challenge yourself with cleaning up the bad datasets. The data is medium-large in size
-there is yet another set of analogous data that is larger.
+there is yet another set of analogous data that is even larger.
+
+Aside from providing some interesting datasets, this package intends to get a little
+*experimental* with data documentation. I mean, wouldn't it be great to have top-notch
+information on the data at your fingertips? To this end, the package supplies data
+dictionaries for each of datasets contained herein. If you discover them and like what
+you see then you learn how to make your own. Then, with this new superpower (and it
+really is a superpower) you can educate and delight your data compatriots in equal 
+measure.
 
 ## Installation
 
