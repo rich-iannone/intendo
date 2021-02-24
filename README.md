@@ -19,8 +19,8 @@ Aside from providing some interesting datasets, this package intends to get a li
 *experimental* with data documentation. I mean, wouldn't it be great to have top-notch
 information on the data at your fingertips? To this end, the package supplies data
 dictionaries for each of datasets contained herein. If you discover them and like what
-you see then you learn how to make your own. Then, with this new superpower (and it
-really is a superpower) you can educate and delight your data compatriots in equal 
+you see then you can learn how to make your own. Then, with this new superpower (and it
+really is a superpower) you can educate and delight your data brethren in equal 
 measure.
 
 ## Installation
