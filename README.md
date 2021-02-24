@@ -6,7 +6,7 @@
 
 The **intendo** R package is pretty much a dataset package but there are some twisty
 twists in here too. There are four datasets available that track the performance 
-of the *Super Jetroid* game mobile game. *On top of that* there are messed up versions
+of the *Super Jetroid* mobile game. *On top of that* there are messed up versions
 of those datasets. Just totally riddled with all sorts of data problems. We call them
 'faulty' and, yeah, they really are.
 
