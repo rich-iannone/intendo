@@ -1,6 +1,8 @@
+<div align="center">
 
+<a href='http://rich-iannone.github.io/intendo/'><img src="man/figures/logo.svg" height="350px"/></a>
 
-# intendo
+</div>
 
 The **intendo** R package is pretty much a dataset package but there are some twisty
 twists in here too. There are four datasets available that track the performance 
