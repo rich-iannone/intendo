@@ -19,17 +19,11 @@ dd_sj_user_summary <- function() {
       can be done). We get information here such as the first login time and
       some information useful for segmentation (`country`, `acquisition`, and
       `device_name`)",
-      `each row is` = "A summary for a given player at a given date, and, the
-      row is only produced if the player has a session on the date in question.
-      Some summarized values are for the date in question (`_day`) and some are
-      all days up to the given date (`_total`). Some values are intrinsic to
-      the player (e.g., `country`) and repeated for all instances of the player
-      for sake of convenience.",
+      `each row is` = "A summary for a given player at first login, and, there
+      is one row per unique player (every player assigned an ID is accounted for
+      in this table). All data were captured on the first login session.",
       `data production` = "This table is created nightly in a pipeline run.
-      Please visit our internal *Intendo* website for status reporting. Data
-      providers occasionally revise the revenue amounts and adjust for refunds,
-      so, revenue amounts can vary a little up to 20 days back from the present
-      day.",
+      Please visit our internal *Intendo* website for status reporting.",
       `person responsible` = "E. Burrows: +1 (416) 329-2462,
       Central Engineering (((Toronto Downtown office)))"
     ) %>%
@@ -43,17 +37,16 @@ dd_sj_user_summary <- function() {
       columns = "first_login",
       info = "The date and time (UTC) that the player was first seen. This is
       typically called the 'first login'.",
-      details = "At the first login, the user is taken pretty quickly to the
-      FTUE (first time user experience) but it's not guaranteed as the user may
-      'login' (generating a username by us) but end the session just after
-      that."
+      details = "At the first login, the user is taken very quickly to the
+      FTUE (first-time user experience) but it's not guaranteed as the user may
+      'login' (generating a username) but end the session just after that."
     ) %>%
     pointblank::info_columns(
       columns = "start_day",
       info = "The day that the player was first seen (the first login day).",
-      details = "When taking the difference in days between `session_start` and
-      `start_day` we get the player age, which is important for cohorting
-      metrics and segmentation."
+      details = "When taking the difference in days between `session_start`
+      (present in the `sj_all_sessions` table) and `start_day` we get the
+      player age, which is important for cohorting metrics and segmentation."
     ) %>%
     pointblank::info_columns(
       columns = "country",
@@ -67,7 +60,7 @@ dd_sj_user_summary <- function() {
     ) %>%
     pointblank::info_columns(
       columns = "device_name",
-      info = "A label that provides a device label for the device used to log
+      info = "A label that provides a product name for the device used to log
       into the game in the player's first session. Taken from the user agent."
     ) %>%
     pointblank::info_section(
