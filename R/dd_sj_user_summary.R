@@ -25,11 +25,11 @@ dd_sj_user_summary <- function() {
       all days up to the given date (`_total`). Some values are intrinsic to
       the player (e.g., `country`) and repeated for all instances of the player
       for sake of convenience.",
-      `data production` = "This table that is created
-      nightly in a pipeline run. Please visit our internal *Intendo*
-      website for status reporting. Data providers occasionally revise
-      the revenue amounts and adjust for refunds, so, revenue amounts
-      can vary a little up to 20 days back from the present day.",
+      `data production` = "This table is created nightly in a pipeline run.
+      Please visit our internal *Intendo* website for status reporting. Data
+      providers occasionally revise the revenue amounts and adjust for refunds,
+      so, revenue amounts can vary a little up to 20 days back from the present
+      day.",
       `person responsible` = "E. Burrows: +1 (416) 329-2462,
       Central Engineering (((Toronto Downtown office)))"
     ) %>%
@@ -71,13 +71,13 @@ dd_sj_user_summary <- function() {
       into the game in the player's first session. Taken from the user agent."
     ) %>%
     pointblank::info_section(
-      section_name = "Futher Details",
+      section_name = "Further Details",
       frequency = "Continuously updated",
       `time of updates` = "Continuously updated",
       `inception` = "2014-12-12"
     ) %>%
     pointblank::incorporate() %>%
     pointblank::get_informant_report(
-      title = "Data Dictionary: `sj_all_sessions`"
+      title = "Data Dictionary: `sj_user_summary`"
     )
 }

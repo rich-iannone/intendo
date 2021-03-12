@@ -118,7 +118,7 @@ dd_sj_all_revenue <- function() {
       countries though incidence of that must be rare."
     ) %>%
     pointblank::info_section(
-      section_name = "Futher Details",
+      section_name = "Further Details",
       frequency = "Three times per day",
       `time of updates` = "At 09:00, 17:00, and 23:00 UTC",
       `inception` = "2014-11-25",

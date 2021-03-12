@@ -98,7 +98,7 @@ dd_sj_all_sessions <- function() {
       is ad revenue."
     ) %>%
     pointblank::info_section(
-      section_name = "Futher Details",
+      section_name = "Further Details",
       frequency = "Continuously updated",
       `time of updates` = "Continuously updated",
       `inception` = "2014-12-12"

@@ -210,7 +210,7 @@ dd_sj_users_daily <- function() {
       info = "A label that designates how/where the player was acquired."
     ) %>%
     pointblank::info_section(
-      section_name = "Futher Details",
+      section_name = "Further Details",
       frequency = "Daily",
       `time of updates` = "Generally between 08:00 and 09:00 UTC",
       `inception` = "2014-12-29",
