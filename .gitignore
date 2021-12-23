@@ -40,4 +40,3 @@ vignettes/*.pdf
 
 # Data production directories
 data-raw/zzz-process_data/*
-data-large/*.rds
