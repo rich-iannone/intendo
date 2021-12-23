@@ -1,6 +1,8 @@
 ^data-raw$
+^data-small$
+^data-medium$
 ^data-large$
-^data-old$
+^data-xlarge$
 ^LICENSE\.md$
 ^README\.Rmd$
 ^.*\.Rproj$
