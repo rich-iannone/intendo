@@ -663,15 +663,19 @@ player_tbl <-
           country_metadata = country_metadata,
           age_distribution = age_distribution,
           device_list = device_list,
-          fraction = 1/400
+          fraction = 1/400 # xlarge: 1/200
         )
       }
     )
   )
 
+player_count <- nrow(player_tbl)
+
 saveRDS(
   player_tbl,
-  file = "data-raw/zzz-process_data/player_tbl_complete.rds"
+  file = paste0(
+    "data-raw/zzz-process_data/player_tbl_complete_", player_count, ".rds"
+  )
 )
 
 # Build the sessions
@@ -693,7 +697,9 @@ for (i in 0:(ceiling(nrow(player_tbl) / 1000) - 1 )) {
 
   saveRDS(
     sessions,
-    file = paste0("data-raw/zzz-process_data/sessions_tbl-", i, ".rds")
+    file = paste0(
+      "data-raw/zzz-process_data/sessions_tbl-", i, "-", player_count, ".rds"
+      )
   )
 
   print(paste0("Generated `sessions_tbl-", i, ".rds`"))
@@ -923,7 +929,7 @@ user_summary <-
   dplyr::select(-device_q) %>%
   dplyr::arrange(first_login)
 
-saveRDS(all_sessions, file = "data-large/all_sessions_large.rds")
-saveRDS(users_daily, file = "data-large/users_daily_large.rds")
-saveRDS(all_revenue, file = "data-large/all_revenue_large.rds")
-saveRDS(user_summary, file = "data-large/user_summary_large.rds")
+saveRDS(all_sessions, file = "data-large/sj_all_sessions_large.rds")
+saveRDS(users_daily, file = "data-large/sj_users_daily_large.rds")
+saveRDS(all_revenue, file = "data-large/sj_all_revenue_large.rds")
+saveRDS(user_summary, file = "data-large/sj_user_summary_large.rds")
