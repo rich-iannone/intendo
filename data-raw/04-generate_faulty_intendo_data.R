@@ -1,19 +1,6 @@
 library(tidyverse)
 library(lubridate)
 
-# Set a seed
-set.seed(23)
-
-users_daily <- readRDS("data-large/users_daily_large.rds")
-all_revenue <- readRDS("data-large/all_revenue_large.rds")
-all_sessions <- readRDS("data-large/all_sessions_large.rds")
-user_summary <- readRDS("data-large/user_summary_large.rds")
-
-users_daily_small <- readRDS("data-raw/sj_users_daily.rds")
-all_revenue_small <- readRDS("data-raw/sj_all_revenue.rds")
-all_sessions_small <- readRDS("data-raw/sj_all_sessions.rds")
-user_summary_small <- readRDS("data-raw/sj_user_summary.rds")
-
 # The `users_daily` table is made faulty in these ways:
 #
 # 1. The `n_iap_day` column is `numeric` instead of `integer`
@@ -37,7 +24,6 @@ user_summary_small <- readRDS("data-raw/sj_user_summary.rds")
 # 18. Some users will have multiple `start_day` values
 # 19. In December, the `is_customer` column will often be incorrect
 # 20. The `level_reached` value will sometimes backtrack in July and August
-
 create_users_daily_f <- function(users_daily) {
 
   random_duplicate_rows <-
@@ -205,7 +191,6 @@ create_users_daily_f <- function(users_daily) {
 # 8. The `acquisition` column will sometimes contain missing values
 # 9. The `country` column will sometimes contain missing values
 # 10. The `session_duration` column will sometimes have negative values
-
 create_all_revenue_f <- function(all_revenue) {
 
   all_revenue %>%
@@ -299,7 +284,6 @@ create_all_revenue_f <- function(all_revenue) {
 # 9. There is a disproportionate amount of `session_start` values
 #     with the same timestamp ("2015-05-15 11:32:44")
 # 10. There are five completely empty rows in the table
-
 create_all_sessions_f <- function(all_sessions) {
 
   other_player_ids <-
@@ -389,7 +373,6 @@ create_all_sessions_f <- function(all_sessions) {
 # 3. Some `first_login` values will have the wrong year
 # 4. Some `device_name` values are all in lowercase with no spaces
 # 5. Some `country` values are presented as two-letter country codes
-
 create_user_summary_f <- function(user_summary) {
 
   user_summary %>%
@@ -438,31 +421,48 @@ create_user_summary_f <- function(user_summary) {
 }
 
 
-users_daily_f <-
-  create_users_daily_f(users_daily = users_daily)
-all_revenue_f <-
-  create_all_revenue_f(all_revenue = all_revenue)
-all_sessions_f <-
-  create_all_sessions_f(all_sessions = all_sessions)
-user_summary_f <-
-  create_user_summary_f(user_summary = user_summary)
+# Set a seed
+set.seed(23)
 
-users_daily_small_f <-
-  create_users_daily_f(users_daily = users_daily_small)
-all_revenue_small_f <-
-  create_all_revenue_f(all_revenue = all_revenue_small)
-all_sessions_small_f <-
-  create_all_sessions_f(all_sessions = all_sessions_small)
-user_summary_small_f <-
-  create_user_summary_f(user_summary = user_summary_small)
+for (size in c("small", "medium", "large", "xlarge")) {
 
+  for (dataset in c(
+    "users_daily", "all_revenue",
+    "all_sessions", "user_summary"
+  )) {
 
-saveRDS(users_daily_f, file = "data-large/users_daily_large_f.rds")
-saveRDS(all_revenue_f, file = "data-large/all_revenue_large_f.rds")
-saveRDS(all_sessions_f, file = "data-large/all_sessions_large_f.rds")
-saveRDS(user_summary_f, file = "data-large/user_summary_large_f.rds")
+    dataset_in <-
+      readRDS(
+        paste0(
+          "data-", size, "/sj_", dataset, "_", size, ".rds"
+        )
+      )
 
-saveRDS(users_daily_small_f, file = "data-raw/sj_users_daily_f.rds")
-saveRDS(all_revenue_small_f, file = "data-raw/sj_all_revenue_f.rds")
-saveRDS(all_sessions_small_f, file = "data-raw/sj_all_sessions_f.rds")
-saveRDS(user_summary_small_f, file = "data-raw/sj_user_summary_f.rds")
+    fn <-
+      switch(
+        dataset,
+        users_daily = create_users_daily_f,
+        all_revenue = create_all_revenue_f,
+        all_sessions = create_all_sessions_f,
+        user_summary = create_user_summary_f
+      )
+
+    dataset_out <- fn(dataset_in)
+
+    saveRDS(
+      dataset_out,
+      paste0(
+        "data-", size, "/sj_", dataset, "_", size, "_f.rds"
+      )
+    )
+
+    print(
+      paste0(
+        "Generated `data-", size, "/sj_", dataset, "_", size, "_f.rds`"
+      )
+    )
+
+    rm(dataset_in)
+    rm(dataset_out)
+  }
+}
