@@ -74,7 +74,6 @@ all_revenue <- function(size = c("small", "medium", "large", "xlarge"),
   )
 }
 
-
 #' Daily users playing Super Jetroid
 #'
 #' @description
