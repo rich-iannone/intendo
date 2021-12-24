@@ -1,11 +1,12 @@
 # Location of GitHub
 gh_repo_intendo <- "rich-iannone/intendo"
 
-#' All revenue amounts for Super Jetroid
+#' All player sessions for Super Jetroid
 #'
 #' @description
-#' This summary table provides revenue data for every in-app purchase and ad
-#' view for players of Super Jetroid in 2015.
+#' This table provides information on player sessions and summarizes the number
+#' of revenue events (ad views and IAP spends) and provides total revenue
+#' amounts (in USD) broken down by type for the session.
 #'
 #' @param size A keyword that allows getting different variants of the table
 #'   based on the size of player base. The default `"small"` table has the
@@ -20,6 +21,36 @@ gh_repo_intendo <- "rich-iannone/intendo"
 #'   in-memory DuckDB database table.
 #' @param keep Should the downloaded data be stored on disk in the working
 #'   directory? By default, this is `FALSE`.
+#'
+#' @return A data table object, which could be a tibble (`tbl_df`) a data
+#'   frame, or an in-memory DuckDB table (`tbl_dbi`).
+#'
+#' @export
+all_sessions <- function(size = c("small", "medium", "large", "xlarge"),
+                         quality = c("perfect", "faulty"),
+                         type = c("tibble", "data.frame", "duckdb"),
+                         keep = FALSE) {
+
+  size <- rlang::arg_match(size)
+  quality <- rlang::arg_match(quality)
+  type <- rlang::arg_match(type)
+
+  get_sj_tbl_from_gh_url(
+    name = "all_sessions",
+    size = size,
+    quality = quality,
+    type = type,
+    keep = keep
+  )
+}
+
+#' All revenue amounts for Super Jetroid
+#'
+#' @description
+#' This summary table provides revenue data for every in-app purchase and ad
+#' view for players of Super Jetroid in 2015.
+#'
+#' @inheritParams all_sessions
 #'
 #' @return A data table object, which could be a tibble (`tbl_df`) a data
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`).
@@ -52,7 +83,7 @@ all_revenue <- function(size = c("small", "medium", "large", "xlarge"),
 #' played, number of IAPs bought and ads viewed, revenue gained, progression
 #' info, and some segmentation categories.
 #'
-#' @inheritParams all_revenue
+#' @inheritParams all_sessions
 #'
 #' @return A data table object, which could be a tibble (`tbl_df`) a data
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`).
@@ -76,44 +107,13 @@ users_daily <- function(size = c("small", "medium", "large", "xlarge"),
   )
 }
 
-#' All player sessions for Super Jetroid
-#'
-#' @description
-#' This table provides information on player sessions and summarizes the number
-#' of revenue events (ad views and IAP spends) and provides total revenue
-#' amounts (in USD) broken down by type for the session.
-#'
-#' @inheritParams all_revenue
-#'
-#' @return A data table object, which could be a tibble (`tbl_df`) a data
-#'   frame, or an in-memory DuckDB table (`tbl_dbi`).
-#'
-#' @export
-all_sessions <- function(size = c("small", "medium", "large", "xlarge"),
-                         quality = c("perfect", "faulty"),
-                         type = c("tibble", "data.frame", "duckdb"),
-                         keep = FALSE) {
-
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
-
-  get_sj_tbl_from_gh_url(
-    name = "all_sessions",
-    size = size,
-    quality = quality,
-    type = type,
-    keep = keep
-  )
-}
-
 #' User summaries for Super Jetroid
 #'
 #' @description This summary table provides information on each user. We get
 #' information here such as the first login/session time and some information
 #' useful for segmentation.
 #'
-#' @inheritParams all_revenue
+#' @inheritParams all_sessions
 #'
 #' @return A data table object, which could be a tibble (`tbl_df`) a data
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`).
