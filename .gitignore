@@ -40,3 +40,6 @@ vignettes/*.pdf
 
 # Data production directories
 data-raw/zzz-process_data/*
+
+# Data files in the root directory
+sj*.rds
