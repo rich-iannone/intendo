@@ -20,7 +20,8 @@ gh_repo_intendo <- "rich-iannone/intendo"
 #'   the **duckdb** package installed, you can instead obtain the table as an
 #'   in-memory DuckDB database table.
 #' @param keep Should the downloaded data be stored on disk in the working
-#'   directory? By default, this is `FALSE`.
+#'   directory? By default, this is `FALSE`. If the file is available in the
+#'   next invocation then the data won't be downloaded again.
 #'
 #' @return A data table object, which could be a tibble (`tbl_df`) a data
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`).
@@ -149,7 +150,12 @@ get_sj_tbl_from_gh_url <- function(name,
       ".rds"
     )
 
-  suppressWarnings(
+  if (file_name %in% list.files()) {
+
+    tbl_data <- readRDS(file_name)
+
+  } else {
+
     tbl_data <-
       pointblank::file_tbl(
         file = pointblank::from_github(
@@ -159,7 +165,7 @@ get_sj_tbl_from_gh_url <- function(name,
         ),
         keep = keep
       )
-  )
+  }
 
   if (type == "data.frame") {
 
