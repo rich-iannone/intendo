@@ -27,7 +27,8 @@ the \strong{duckdb} package installed, you can instead obtain the table as an
 in-memory DuckDB database table.}
 
 \item{keep}{Should the downloaded data be stored on disk in the working
-directory? By default, this is \code{FALSE}.}
+directory? By default, this is \code{FALSE}. If the file is available in the
+next invocation then the data won't be downloaded again.}
 }
 \value{
 A data table object, which could be a tibble (\code{tbl_df}) a data
