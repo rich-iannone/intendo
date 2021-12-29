@@ -3,13 +3,28 @@
 #' The `all_sessions_dd()` function generates a data dictionary based on the
 #' `all_sessions` table.
 #'
+#' @inheritParams all_sessions
+#'
 #' @return A `ptblank_informant` object.
 #'
 #' @export
-all_sessions_dd <- function() {
+all_sessions_dd <- function(size = c("small", "medium", "large", "xlarge"),
+                            quality = c("perfect", "faulty"),
+                            type = c("tibble", "data.frame", "duckdb")) {
+
+  size <- rlang::arg_match(size)
+  quality <- rlang::arg_match(quality)
+  type <- rlang::arg_match(type)
+
+  formula <-
+    get_sj_tbl_read_fn(
+      size = size,
+      quality = quality,
+      type = type
+    )
 
   pointblank::create_informant(
-    read_fn = ~ intendo::all_sessions(),
+    read_fn = formula,
     label = "All player sessions from *Super Jetroid*",
     tbl_name = "all_sessions"
   ) %>%
@@ -115,13 +130,28 @@ all_sessions_dd <- function() {
 #' The `all_revenue_dd()` function generates a data dictionary based on the
 #' `all_revenue` table.
 #'
+#' @inheritParams all_sessions
+#'
 #' @return A `ptblank_informant` object.
 #'
 #' @export
-all_revenue_dd <- function() {
+all_revenue_dd <- function(size = c("small", "medium", "large", "xlarge"),
+                           quality = c("perfect", "faulty"),
+                           type = c("tibble", "data.frame", "duckdb")) {
+
+  size <- rlang::arg_match(size)
+  quality <- rlang::arg_match(quality)
+  type <- rlang::arg_match(type)
+
+  formula <-
+    get_sj_tbl_read_fn(
+      size = size,
+      quality = quality,
+      type = type
+    )
 
   pointblank::create_informant(
-    read_fn = ~ intendo::all_revenue(),
+    read_fn = formula,
     label = "All revenue events for *Super Jetroid*",
     tbl_name = "all_revenue"
   ) %>%
@@ -252,13 +282,28 @@ all_revenue_dd <- function() {
 #' The `users_daily_dd()` function generates a data dictionary based on the
 #' `users_daily` table.
 #'
+#' @inheritParams all_sessions
+#'
 #' @return A `ptblank_informant` object.
 #'
 #' @export
-users_daily_dd <- function() {
+users_daily_dd <- function(size = c("small", "medium", "large", "xlarge"),
+                           quality = c("perfect", "faulty"),
+                           type = c("tibble", "data.frame", "duckdb")) {
+
+  size <- rlang::arg_match(size)
+  quality <- rlang::arg_match(quality)
+  type <- rlang::arg_match(type)
+
+  formula <-
+    get_sj_tbl_read_fn(
+      size = size,
+      quality = quality,
+      type = type
+    )
 
   pointblank::create_informant(
-    read_fn = ~ intendo::users_daily(),
+    read_fn = formula,
     label = "Daily users playing *Super Jetroid*",
     tbl_name = "users_daily"
   ) %>%
@@ -481,11 +526,26 @@ users_daily_dd <- function() {
 #' The `user_summary_dd()` function generates a data dictionary based on the
 #' `user_summary` table.
 #'
+#' @inheritParams all_sessions
+#'
 #' @export
-user_summary_dd <- function() {
+user_summary_dd <- function(size = c("small", "medium", "large", "xlarge"),
+                            quality = c("perfect", "faulty"),
+                            type = c("tibble", "data.frame", "duckdb")) {
+
+  size <- rlang::arg_match(size)
+  quality <- rlang::arg_match(quality)
+  type <- rlang::arg_match(type)
+
+  formula <-
+    get_sj_tbl_read_fn(
+      size = size,
+      quality = quality,
+      type = type
+    )
 
   pointblank::create_informant(
-    read_fn = ~ intendo::user_summary(),
+    read_fn = formula,
     label = "Summary of important player activity in *Super Jetroid*",
     tbl_name =  "user_summary"
   ) %>%
@@ -550,4 +610,27 @@ user_summary_dd <- function() {
     pointblank::get_informant_report(
       title = "Data Dictionary: `user_summary`"
     )
+}
+
+get_sj_tbl_read_fn <- function(size,
+                               quality,
+                               type) {
+
+  args <- c()
+
+  if (size != "small") {
+    args <- c(args, paste0("size = ", dQuote(size, "double")))
+  }
+
+  if (size != "perfect") {
+    args <- c(args, paste0("quality = ", dQuote(quality, "double")))
+  }
+
+  if (size != "tibble") {
+    args <- c(args, paste0("type = ", dQuote(type, "double")))
+  }
+
+  args <- paste(args, collapse = ", ")
+
+  stats::as.formula(paste0("~ intendo::all_sessions(", args, ")"))
 }
