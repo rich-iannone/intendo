@@ -4,7 +4,26 @@
 \alias{all_revenue_dd}
 \title{Data Dictionary for \code{all_revenue}}
 \usage{
-all_revenue_dd()
+all_revenue_dd(
+  size = c("small", "medium", "large", "xlarge"),
+  quality = c("perfect", "faulty"),
+  type = c("tibble", "data.frame", "duckdb")
+)
+}
+\arguments{
+\item{size}{A keyword that allows getting different variants of the table
+based on the size of player base. The default \code{"small"} table has the
+lowest number of players/records. Increasing in size, we can also opt for
+the \code{"medium"}, \code{"large"}, or \code{"xlarge"} versions.}
+
+\item{quality}{The data quality level of the returned dataset. There are two
+options: (1) \code{"perfect"} provides a pristine table with no errors at all
+and (2) \code{"faulty"} gives you a table with a multitude of errors.}
+
+\item{type}{The table return type. By default, this is a \code{"tibble"} but a
+\code{"data.frame"} can instead be returned if using that keyword. If you have
+the \strong{duckdb} package installed, you can instead obtain the table as an
+in-memory DuckDB database table.}
 }
 \value{
 A \code{ptblank_informant} object.
