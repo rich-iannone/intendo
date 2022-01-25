@@ -1,5 +1,5 @@
 Package: intendo
-Title: A Group of Datasets for Data Testing
+Title: A Group of Fun Datasets of Various Sizes and Differing Quality
 Version: 0.0.0.9000
 Authors@R: 
     person("Richard", "Iannone", , "riannone@me.com", c("aut", "cre"),
