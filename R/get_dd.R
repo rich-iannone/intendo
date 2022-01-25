@@ -34,7 +34,9 @@ all_sessions_dd <- function(size = c("small", "medium", "large", "xlarge"),
       contains summarized data for the number of revenue events (ad views and \\
       IAP spends) and provides total revenue amounts (in USD) broken down by \\
       type for each session.",
-      `each row is` = "A player session.",
+      `each row is` = "A player session. Each session has a unique identifier \\
+      and every row contains pertinent information about player revenue \\
+      earned during the session.",
       `data production` = "This table is revised consistently throughout the \\
       day. Please visit our internal *Intendo* website to view status \\
       reports on delayed data.",
@@ -43,19 +45,20 @@ all_sessions_dd <- function(size = c("small", "medium", "large", "xlarge"),
     ) %>%
     pointblank::info_columns(
       columns = "player_id",
-      info = "This is a unique identifier for a user/player.",
+      info = "A unique identifier for a user/player.",
       details = "Always composed of 12 *uppercase* letters followed \\
       by 3 digits."
     ) %>%
     pointblank::info_columns(
       columns = "session_id",
-      info = "This is a unique identifier for a player session.",
+      info = "A unique identifier for a player session.",
       details = "Always composed of the `player_id` followed by a hyphen and \\
       a random alphanumeric string of 8 characters (using lowercase letters)."
     ) %>%
     pointblank::info_columns(
       columns = "session_start",
-      info = "The starting time of the session. This is a datetime value \\
+      info = "The starting time of the session.",
+      details = "This is a datetime value \\
       (in the [[YYYY-MM-DD hh-mm-ss]]<<color: steelblue;>> format) for when \\
       a player (with `player_id`) logged into the game.",
       details = ""
@@ -82,9 +85,9 @@ all_sessions_dd <- function(size = c("small", "medium", "large", "xlarge"),
     pointblank::info_columns(
       columns = "rev_iap",
       info = "The estimated revenue generated in the session by a player \\
-      from IAPs. The value is in USD and already deducts the 30% reserved \\
-      for the app stores.",
-      details = "Players in other countries will pay in their local \\
+      from IAPs.",
+      details = "The value is in USD and already deducts the 30% reserved \\
+      for the app stores. Players in other countries will pay in their local \\
       currencies but we set all prices in USD in the two stores, taking into \\
       account currency conversion and relative affordability across the \\
       different regions."
@@ -102,8 +105,8 @@ all_sessions_dd <- function(size = c("small", "medium", "large", "xlarge"),
     ) %>%
     pointblank::info_columns(
       columns = "rev_all",
-      info = "This is simply the sum of `rev_iap_day` and `rev_ads_day` for \\
-      a player in a given session.",
+      info = "The sum of `rev_iap_day` and `rev_ads_day` for a player in a \\
+      given session.",
       details = "These values are based on estimates that only improve \\
       slightly with time (through backfilling of IAP data). The more \\
       uncertain component is the ad revenue."
@@ -176,25 +179,24 @@ all_revenue_dd <- function(size = c("small", "medium", "large", "xlarge"),
     ) %>%
     pointblank::info_columns(
       columns = "player_id",
-      info = "This is a unique identifier for a user/player.",
+      info = "A unique identifier for a user/player.",
       details = "Always composed of 12 *uppercase* letters followed \\
       by 3 digits."
     ) %>%
     pointblank::info_columns(
       columns = "session_id",
-      info = "This is a unique identifier for a player session.",
-      details = "Always composed of the `player_id` followed by a hyphen and \\
-      a random alphanumeric string of 8 characters (using lowercase letters)."
+      info = "A unique identifier for a player session.",
+      details = "The session in which the revenue event occurred. Always \\
+      composed of the `player_id` followed by a hyphen and a random \\
+      alphanumeric string of 8 characters (using lowercase letters)."
     ) %>%
     pointblank::info_columns(
       columns = "session_start",
       info = "The starting time of the session in which a revenue event \\
-      occurred (in the [[YYYY-MM-DD]]<<color: steelblue;>> format).",
+      occurred.",
       details = "This is a datetime value (in the \\
-      [[YYYY-MM-DD hh-mm-ss]]<<color: steelblue;>> format) for when a player \\
-      (with a `player_id`) logged into the game and is associated with a \\
-      session that had at least one revenue event. Note that this is based on \\
-      UTC time and not the player's local time."
+      [[YYYY-MM-DD hh-mm-ss]]<<color: steelblue;>> format). Note that this \\
+      is based on UTC time and not the player's local time."
     ) %>%
     pointblank::info_columns(
       columns = "time",
@@ -203,7 +205,9 @@ all_revenue_dd <- function(size = c("small", "medium", "large", "xlarge"),
       the moment of purchase initiation. However, some cancelled/failed \\
       transactions will still appear as a purchase. In later pipeline runs, \\
       this is corrected with store data. The incidence of this happening is \\
-      generally quite low however."
+      generally quite low however. This is a datetime value (in the \\
+      [[YYYY-MM-DD hh-mm-ss]]<<color: steelblue;>> format). Note that this \\
+      is based on UTC time and not the player's local time."
     ) %>%
     pointblank::info_columns(
       columns = "item_type",
@@ -329,19 +333,19 @@ users_daily_dd <- function(size = c("small", "medium", "large", "xlarge"),
     ) %>%
     pointblank::info_columns(
       columns = "player_id",
-      info = "This is a unique identifier for a user/player.",
+      info = "A unique identifier for a user/player.",
       details = "Always composed of 12 *uppercase* letters followed \\
       by 3 digits."
     ) %>%
     pointblank::info_columns(
       columns = "login_date",
-      info = "The date (in the [[YYYY-MM-DD]]<<color: steelblue;>> format) \\
-      that a player (with a `player_id`) logged into the game for *any amount \\
-      of time*. Since this is a daily summary by player we expect dates and \\
-      *not* date-time values.",
-      details = "Note that dates are based on UTC time and not the player's \\
-      local time. Also, sessions that carry on to the next day (in UTC time, \\
-      again) are not double counted."
+      info = "The date that a player logged into the game for *any amount \\
+      of time*.",
+      details = "Since this is a daily summary by player we expect dates and \\
+      *not* date-time values. The date is in the \\
+      [[YYYY-MM-DD]]<<color: steelblue;>> format and dates are based on UTC \\
+      time and not the player's local time. Furthermore, sessions that carry \\
+      on to the next day (again, in UTC time) are not double counted."
     ) %>%
     pointblank::info_columns(
       columns = "sessions_day",
@@ -375,10 +379,9 @@ users_daily_dd <- function(size = c("small", "medium", "large", "xlarge"),
     ) %>%
     pointblank::info_columns(
       columns = "rev_iap_day",
-      info = "The estimated revenue generated each day by a player from IAPs. \\
-      The value is in USD and already deducts the 30% reserved for the app \\
-      stores.",
-      details = "Players in other countries will pay in their local \\
+      info = "The estimated revenue generated each day by a player from IAPs.",
+      details = "The value is in USD and already deducts the 30% reserved for \\
+      the app stores. Players in other countries will pay in their local \\
       currencies but we set all prices in USD in the two stores, taking into \\
       account currency conversion and relative affordability across the \\
       different regions."
@@ -396,8 +399,8 @@ users_daily_dd <- function(size = c("small", "medium", "large", "xlarge"),
     ) %>%
     pointblank::info_columns(
       columns = "rev_all_day",
-      info = "This is simply the sum of `rev_iap_day` and `rev_ads_day` for \\
-      a player on a given date.",
+      info = "The sum of `rev_iap_day` and `rev_ads_day` for a player on a \\
+      given date.",
       details = "These values are based on estimates that only improve \\
       slightly with time (through backfilling of IAP data). The more \\
       uncertain component is ad revenue."
@@ -567,7 +570,7 @@ user_summary_dd <- function(size = c("small", "medium", "large", "xlarge"),
     ) %>%
     pointblank::info_columns(
       columns = "player_id",
-      info = "This is a unique identifier for a user/player.",
+      info = "A unique identifier for a user/player.",
       details = "Always composed of 12 *uppercase* letters followed by \\
       3 digits."
     ) %>%
@@ -602,8 +605,8 @@ user_summary_dd <- function(size = c("small", "medium", "large", "xlarge"),
     pointblank::info_columns(
       columns = "device_name",
       info = "A label that provides a product name for the device used to log \\
-      into the game in the player's first session. Taken from the user agent \\
-      string (which isn't stored)."
+      into the game in the player's first session.",
+      details = "Taken from the user agent string (which isn't stored)."
     ) %>%
     pointblank::info_section(
       section_name = "Further Details",
