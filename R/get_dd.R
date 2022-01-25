@@ -24,7 +24,7 @@ all_sessions_dd <- function(size = c("small", "medium", "large", "xlarge"),
     )
 
   pointblank::create_informant(
-    read_fn = formula,
+    tbl = formula,
     label = "All player sessions from *Super Jetroid*",
     tbl_name = "all_sessions"
   ) %>%
@@ -151,7 +151,7 @@ all_revenue_dd <- function(size = c("small", "medium", "large", "xlarge"),
     )
 
   pointblank::create_informant(
-    read_fn = formula,
+    tbl = formula,
     label = "All revenue events for *Super Jetroid*",
     tbl_name = "all_revenue"
   ) %>%
@@ -303,7 +303,7 @@ users_daily_dd <- function(size = c("small", "medium", "large", "xlarge"),
     )
 
   pointblank::create_informant(
-    read_fn = formula,
+    tbl = formula,
     label = "Daily users playing *Super Jetroid*",
     tbl_name = "users_daily"
   ) %>%
@@ -545,7 +545,7 @@ user_summary_dd <- function(size = c("small", "medium", "large", "xlarge"),
     )
 
   pointblank::create_informant(
-    read_fn = formula,
+    tbl = formula,
     label = "Summary of important player activity in *Super Jetroid*",
     tbl_name =  "user_summary"
   ) %>%
