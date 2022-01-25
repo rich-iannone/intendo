@@ -1,6 +1,193 @@
 library(tidyverse)
 library(lubridate)
 
+# The `all_sessions` table is made faulty in these ways:
+#
+# 1. The `n_iap` column is `numeric` instead of `integer`
+# 2. The first component of the `session_id` will sometimes not match
+#    the `player_id`
+# 3. The `player_id` is sometimes missing
+# 4. There is occasionally a `rev_iap` value of 1.39 even though
+#    `n_iap` is `0`
+# 5. There are some `rev_all` that aren't the exact sum of
+#    `rev_iap` and `rev_ads`
+# 6. The `session_duration` column will sometimes have huge values
+# 7. Some `session_start` values will have the wrong year
+# 8. Some `rev_all` values are missing
+# 9. There is a disproportionate amount of `session_start` values
+#     with the same timestamp ("2015-05-15 11:32:44")
+# 10. There are five completely empty rows in the table
+create_all_sessions_f <- function(all_sessions) {
+
+  other_player_ids <-
+    all_sessions %>%
+    dplyr::select(player_id) %>%
+    dplyr::distinct() %>%
+    head(500) %>%
+    dplyr::pull(player_id)
+
+  empty_rows <-
+    sample(seq_len(nrow(all_sessions)), size = 5)
+
+
+  all_sessions %>%
+    dplyr::mutate(n_iap = as.numeric(n_iap)) %>% # 1
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      session_id = ifelse(
+        sample(1:50, 1) == 1,
+        paste0(sample(other_player_ids, 1), "-", gsub(".*?-", "", session_id)),
+        session_id
+      )
+    ) %>% # 2
+    dplyr::mutate(
+      player_id = ifelse(
+        sample(1:100, 1) == 1,
+        NA_character_,
+        player_id
+      )
+    ) %>% # 3
+    dplyr::mutate(
+      rev_iap = ifelse(
+        sample(1:20, 1) == 1 && n_iap == 0,
+        1.39,
+        rev_iap
+      )
+    ) %>% # 4
+    dplyr::mutate(
+      rev_all = ifelse(
+        sample(1:80, 1) == 1,
+        rev_iap + rev_ads + 2.75,
+        rev_all
+      )
+    ) %>% # 5
+    dplyr::mutate(
+      session_duration = ifelse(
+        sample(1:100, 1) == 1,
+        8888,
+        session_duration
+      )
+    ) %>% # 6
+    dplyr::mutate(
+      session_start = ifelse(
+        sample(1:100, 1) == 1,
+        session_start + (2 * 24 * 60 * 60 * 365) + (24 * 60 * 60),
+        session_start
+      ) %>%
+        as.POSIXct(tz = "GMT", origin = "1970-01-01")
+    ) %>% # 7
+    dplyr::mutate(
+      rev_all = ifelse(
+        sample(1:80, 1) == 1,
+        NA_real_,
+        rev_all
+      )
+    ) %>% # 8
+    dplyr::mutate(
+      session_start = ifelse(
+        !is.na(session_start) && sample(1:80, 1) == 1,
+        lubridate::ymd_hms("2015-05-15 11:32:44"),
+        session_start
+      ) %>%
+        as.POSIXct(tz = "GMT", origin = "1970-01-01")
+    ) %>% # 9
+    dplyr::ungroup() %>%
+    dplyr::add_row(.after = empty_rows[1]) %>%
+    dplyr::add_row(.after = empty_rows[2]) %>%
+    dplyr::add_row(.after = empty_rows[3]) %>%
+    dplyr::add_row(.after = empty_rows[4]) %>%
+    dplyr::add_row(.after = empty_rows[5]) # 10
+}
+
+# The `all_revenue` table is made faulty in these ways:
+#
+# 1. The `country` column will sometimes contain missing values
+# 2. The `player_id` sometimes has an `&` character appended to it
+# 3. The `item_revenue` is sometimes 0 for `ad_5sec`
+# 4. The `acquisition` item `facebook` is sometimes capitalized
+# 5. The `acquisition` item `google` is sometimes capitalized
+# 6. The `item_name` beginning with `offer` sometimes won't have a suffixed number
+# 7. The `item_type` is sometimes missing
+# 8. The `acquisition` column will sometimes contain missing values
+# 9. The `country` column will sometimes contain missing values
+# 10. The `session_duration` column will sometimes have negative values
+create_all_revenue_f <- function(all_revenue) {
+
+  all_revenue %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      country = ifelse(
+        sample(1:100, 1) == 1,
+        NA_character_,
+        country
+      )
+    ) %>% # 1
+    dplyr::mutate(
+      player_id = ifelse(
+        sample(1:100, 1) == 1,
+        paste0(player_id, "&"),
+        player_id
+      )
+    ) %>% # 2
+    dplyr::mutate(
+      item_revenue = ifelse(
+        sample(1:5, 1) == 1 && item_name == "ad_5sec",
+        0.0,
+        item_revenue
+      )
+    ) %>% # 3
+    dplyr::mutate(
+      acquisition = ifelse(
+        sample(1:5, 1) == 1 && acquisition == "facebook",
+        "Facebook",
+        acquisition
+      )
+    ) %>% # 4
+    dplyr::mutate(
+      acquisition = ifelse(
+        sample(1:5, 1) == 1 && acquisition == "google",
+        "Google",
+        acquisition
+      )
+    ) %>% # 5
+    dplyr::mutate(
+      item_name = ifelse(
+        sample(1:10, 1) == 1 && grepl("offer", item_name),
+        "offer",
+        item_name
+      )
+    ) %>% # 6
+    dplyr::mutate(
+      item_type = ifelse(
+        sample(1:24, 1) == 1,
+        NA_character_,
+        item_type
+      )
+    ) %>% # 7
+    dplyr::mutate(
+      acquisition = ifelse(
+        sample(1:200, 1) == 1,
+        NA_character_,
+        acquisition
+      )
+    ) %>% # 8
+    dplyr::mutate(
+      country = ifelse(
+        sample(1:100, 1) == 1,
+        NA_character_,
+        country
+      )
+    ) %>% # 9
+    dplyr::mutate(
+      session_duration = ifelse(
+        sample(1:100, 1) == 1,
+        session_duration * -1.0,
+        session_duration
+      )
+    ) %>% # 10
+    dplyr::ungroup()
+}
+
 # The `users_daily` table is made faulty in these ways:
 #
 # 1. The `n_iap_day` column is `numeric` instead of `integer`
@@ -176,194 +363,6 @@ create_users_daily_f <- function(users_daily) {
     ) %>% # 20
     dplyr::ungroup() %>%
     dplyr::select(-row_number)
-}
-
-
-# The `all_revenue` table is made faulty in these ways:
-#
-# 1. The `country` column will sometimes contain missing values
-# 2. The `player_id` sometimes has an `&` character appended to it
-# 3. The `item_revenue` is sometimes 0 for `ad_5sec`
-# 4. The `acquisition` item `facebook` is sometimes capitalized
-# 5. The `acquisition` item `google` is sometimes capitalized
-# 6. The `item_name` beginning with `offer` sometimes won't have a suffixed number
-# 7. The `item_type` is sometimes missing
-# 8. The `acquisition` column will sometimes contain missing values
-# 9. The `country` column will sometimes contain missing values
-# 10. The `session_duration` column will sometimes have negative values
-create_all_revenue_f <- function(all_revenue) {
-
-  all_revenue %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      country = ifelse(
-        sample(1:100, 1) == 1,
-        NA_character_,
-        country
-      )
-    ) %>% # 1
-    dplyr::mutate(
-      player_id = ifelse(
-        sample(1:100, 1) == 1,
-        paste0(player_id, "&"),
-        player_id
-      )
-    ) %>% # 2
-    dplyr::mutate(
-      item_revenue = ifelse(
-        sample(1:5, 1) == 1 && item_name == "ad_5sec",
-        0.0,
-        item_revenue
-      )
-    ) %>% # 3
-    dplyr::mutate(
-      acquisition = ifelse(
-        sample(1:5, 1) == 1 && acquisition == "facebook",
-        "Facebook",
-        acquisition
-      )
-    ) %>% # 4
-    dplyr::mutate(
-      acquisition = ifelse(
-        sample(1:5, 1) == 1 && acquisition == "google",
-        "Google",
-        acquisition
-      )
-    ) %>% # 5
-    dplyr::mutate(
-      item_name = ifelse(
-        sample(1:10, 1) == 1 && grepl("offer", item_name),
-        "offer",
-        item_name
-      )
-    ) %>% # 6
-    dplyr::mutate(
-      item_type = ifelse(
-        sample(1:24, 1) == 1,
-        NA_character_,
-        item_type
-      )
-    ) %>% # 7
-    dplyr::mutate(
-      acquisition = ifelse(
-        sample(1:200, 1) == 1,
-        NA_character_,
-        acquisition
-      )
-    ) %>% # 8
-    dplyr::mutate(
-      country = ifelse(
-        sample(1:100, 1) == 1,
-        NA_character_,
-        country
-      )
-    ) %>% # 9
-    dplyr::mutate(
-      session_duration = ifelse(
-        sample(1:100, 1) == 1,
-        session_duration * -1.0,
-        session_duration
-      )
-    ) %>% # 10
-    dplyr::ungroup()
-}
-
-# The `all_sessions` table is made faulty in these ways:
-#
-# 1. The `n_iap` column is `numeric` instead of `integer`
-# 2. The first component of the `session_id` will sometimes not match
-#    the `player_id`
-# 3. The `player_id` is sometimes missing
-# 4. There is occasionally a `rev_iap` value of 1.39 even though
-#    `n_iap` is `0`
-# 5. There are some `rev_all` that aren't the exact sum of
-#    `rev_iap` and `rev_ads`
-# 6. The `session_duration` column will sometimes have huge values
-# 7. Some `session_start` values will have the wrong year
-# 8. Some `rev_all` values are missing
-# 9. There is a disproportionate amount of `session_start` values
-#     with the same timestamp ("2015-05-15 11:32:44")
-# 10. There are five completely empty rows in the table
-create_all_sessions_f <- function(all_sessions) {
-
-  other_player_ids <-
-    all_sessions %>%
-    dplyr::select(player_id) %>%
-    dplyr::distinct() %>%
-    head(500) %>%
-    dplyr::pull(player_id)
-
-  empty_rows <-
-    sample(seq_len(nrow(all_sessions)), size = 5)
-
-
-  all_sessions %>%
-    dplyr::mutate(n_iap = as.numeric(n_iap)) %>% # 1
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      session_id = ifelse(
-        sample(1:50, 1) == 1,
-        paste0(sample(other_player_ids, 1), "-", gsub(".*?-", "", session_id)),
-        session_id
-      )
-    ) %>% # 2
-    dplyr::mutate(
-      player_id = ifelse(
-        sample(1:100, 1) == 1,
-        NA_character_,
-        player_id
-      )
-    ) %>% # 3
-    dplyr::mutate(
-      rev_iap = ifelse(
-        sample(1:20, 1) == 1 && n_iap == 0,
-        1.39,
-        rev_iap
-      )
-    ) %>% # 4
-    dplyr::mutate(
-      rev_all = ifelse(
-        sample(1:80, 1) == 1,
-        rev_iap + rev_ads + 2.75,
-        rev_all
-      )
-    ) %>% # 5
-    dplyr::mutate(
-      session_duration = ifelse(
-        sample(1:100, 1) == 1,
-        8888,
-        session_duration
-      )
-    ) %>% # 6
-    dplyr::mutate(
-      session_start = ifelse(
-        sample(1:100, 1) == 1,
-        session_start + (2 * 24 * 60 * 60 * 365) + (24 * 60 * 60),
-        session_start
-      ) %>%
-        as.POSIXct(tz = "GMT", origin = "1970-01-01")
-    ) %>% # 7
-    dplyr::mutate(
-      rev_all = ifelse(
-        sample(1:80, 1) == 1,
-        NA_real_,
-        rev_all
-      )
-    ) %>% # 8
-    dplyr::mutate(
-      session_start = ifelse(
-        !is.na(session_start) && sample(1:80, 1) == 1,
-        lubridate::ymd_hms("2015-05-15 11:32:44"),
-        session_start
-      ) %>%
-        as.POSIXct(tz = "GMT", origin = "1970-01-01")
-    ) %>% # 9
-    dplyr::ungroup() %>%
-    dplyr::add_row(.after = empty_rows[1]) %>%
-    dplyr::add_row(.after = empty_rows[2]) %>%
-    dplyr::add_row(.after = empty_rows[3]) %>%
-    dplyr::add_row(.after = empty_rows[4]) %>%
-    dplyr::add_row(.after = empty_rows[5]) # 10
 }
 
 # The `user_summary` table is made faulty in these ways:
