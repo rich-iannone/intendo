@@ -8,9 +8,11 @@
 #' @return A `ptblank_informant` object.
 #'
 #' @export
-all_sessions_dd <- function(size = c("small", "medium", "large", "xlarge"),
-                            quality = c("perfect", "faulty"),
-                            type = c("tibble", "data.frame", "duckdb")) {
+all_sessions_dd <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb")
+) {
 
   size <- rlang::arg_match(size)
   quality <- rlang::arg_match(quality)
@@ -133,9 +135,11 @@ all_sessions_dd <- function(size = c("small", "medium", "large", "xlarge"),
 #' @return A `ptblank_informant` object.
 #'
 #' @export
-all_revenue_dd <- function(size = c("small", "medium", "large", "xlarge"),
-                           quality = c("perfect", "faulty"),
-                           type = c("tibble", "data.frame", "duckdb")) {
+all_revenue_dd <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb")
+) {
 
   size <- rlang::arg_match(size)
   quality <- rlang::arg_match(quality)
@@ -286,9 +290,11 @@ all_revenue_dd <- function(size = c("small", "medium", "large", "xlarge"),
 #' @return A `ptblank_informant` object.
 #'
 #' @export
-users_daily_dd <- function(size = c("small", "medium", "large", "xlarge"),
-                           quality = c("perfect", "faulty"),
-                           type = c("tibble", "data.frame", "duckdb")) {
+users_daily_dd <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb")
+) {
 
   size <- rlang::arg_match(size)
   quality <- rlang::arg_match(quality)
@@ -532,9 +538,11 @@ users_daily_dd <- function(size = c("small", "medium", "large", "xlarge"),
 #' @inheritParams all_sessions
 #'
 #' @export
-user_summary_dd <- function(size = c("small", "medium", "large", "xlarge"),
-                            quality = c("perfect", "faulty"),
-                            type = c("tibble", "data.frame", "duckdb")) {
+user_summary_dd <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb")
+) {
 
   size <- rlang::arg_match(size)
   quality <- rlang::arg_match(quality)
@@ -620,10 +628,7 @@ user_summary_dd <- function(size = c("small", "medium", "large", "xlarge"),
     )
 }
 
-get_sj_tbl_read_fn <- function(name,
-                               size,
-                               quality,
-                               type) {
+get_sj_tbl_read_fn <- function(name, size, quality, type) {
 
   args <- c()
 
