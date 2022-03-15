@@ -122,7 +122,7 @@ all_sessions_dd <- function(
     pointblank::incorporate() %>%
     pointblank::get_informant_report(
       title = "Data Dictionary: `all_sessions`",
-      size = "small"
+      size = "600px"
     )
 }
 
@@ -278,7 +278,7 @@ all_revenue_dd <- function(
     pointblank::incorporate() %>%
     pointblank::get_informant_report(
       title = "Data Dictionary: `all_revenue`",
-      size = "small"
+      size = "600px"
     )
 }
 
@@ -529,7 +529,7 @@ users_daily_dd <- function(
     pointblank::incorporate() %>%
     pointblank::get_informant_report(
       title = "Data Dictionary: `users_daily`",
-      size = "small"
+      size = "600px"
     )
 }
 
@@ -628,7 +628,7 @@ user_summary_dd <- function(
     pointblank::incorporate() %>%
     pointblank::get_informant_report(
       title = "Data Dictionary: `user_summary`",
-      size = "small"
+      size = "600px"
     )
 }
 
