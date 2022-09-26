@@ -7,7 +7,7 @@
 user_summary(
   size = c("small", "medium", "large", "xlarge"),
   quality = c("perfect", "faulty"),
-  type = c("tibble", "data.frame", "duckdb"),
+  type = c("tibble", "data.frame", "duckdb", "csv"),
   keep = FALSE
 )
 }
@@ -32,7 +32,8 @@ next invocation then the data won't be downloaded again.}
 }
 \value{
 A data table object, which could be a tibble (\code{tbl_df}) a data
-frame, or an in-memory DuckDB table (\code{tbl_dbi}).
+frame, or an in-memory DuckDB table (\code{tbl_dbi}). If a CSV is written then
+\code{TRUE} will be invisibly returned.
 }
 \description{
 This summary table provides information on each user. We get
