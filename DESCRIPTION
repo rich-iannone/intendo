@@ -6,12 +6,12 @@ Authors@R:
            comment = c(ORCID = "0000-0003-3925-190X"))
 Description: This package provides four datasets from the 'Intendo' game
     'Super Jetroid'. It is data from the 2015 year of operation and it comprises
-    a revenue table ('all_revenue'), a user summary table ('user_summary'), a
-    daily users table ('users_daily'), and a table with data on all user
-    sessions ('all_sessions'). These core datasets come in different sizes, and,
-    each of those has a variant that was intentionally made faulty (totally
-    riddled with errors and inconsistencies). This suite of tables is useful for
-    testing with packages that focus on data validation and data documentation.
+    a revenue table ('all_revenue'), a daily users table ('users_daily'), a user
+    summary table ('user_summary'), and a table with data on all user sessions
+    ('all_sessions'). These core datasets come in different sizes, and, each of
+    them has a variant that was intentionally made faulty (totally riddled with
+    errors and inconsistencies). This suite of tables is useful for testing with
+    packages that focus on data validation and data documentation.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
