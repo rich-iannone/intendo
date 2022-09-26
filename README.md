@@ -4,21 +4,24 @@
 
 </div>
 
-The **intendo** R package provides access to several synthetic yet realistic analytics datasets:
+The **intendo** R package provides access to several synthetic yet realistic analytics datasets. Taken together, the interrelated tables help to track the performance of the nonexistent *Super Jetroid* game for mobile devices. 
 
-- `all_sessions`
-- `all_revenue`
-- `users_daily`
-- `user_summary`
+There are four tables which come in four different sizes (`"small"`, `"medium"`, `"large"`, and `"xlarge"`), representing increasingly larger player bases. 
 
-These four tables track the performance of the nonexistent *Super Jetroid* mobile game. The tables are interrelated and there is internal consistency between them (they were created from a much larger table containing all analytics events). There are four sizes for each of these (`"small"`, `"medium"`, `"large"`, and `"xlarge"`) which represent increasingly larger player bases. Regardless of size, each table has a variant containing errors and data inconsistencies (the `"faulty"` type). Each table is accessed via its namesake function (e.g., `all_sessions()`) and the object returned can either be a tibble, a data frame, or an in-memory database table (DuckDB).
+- `all_revenue`: *all revenue amounts*
+- `users_daily`: *records of daily users*
+- `user_summary`: *summaries for all users*
+- `all_sessions`: *all user sessions*
 
-These datasets, in all their variations, can be useful for practicing with data of various sizes. We could also use them to learn about data quality (since there are faulty versions of the data) and data documentation (since the connected datasets can be envisaged as essential core data for the proper functioning of an organization).
+For each table, regardless of size, there is a special variant table containing errors and data inconsistencies (the `"faulty"` type).
+
+Each table is accessed via its namesake function (e.g., `all_sessions()`) and the object returned can either be a tibble, a data frame, or an in-memory **DuckDB** database table.
+
+These datasets, in all their variations, can be useful for practicing with data of various sizes. They can be used to learn about data quality (since there are faulty versions of the data) and data documentation (since the connected datasets can be envisaged as essential core data for the proper functioning of an analytics department).
 
 ## Installation
 
-You can install the development version of **intendo** from
-[GitHub](https://github.com/) with:
+You can install the development version of **intendo** from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
