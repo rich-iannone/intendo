@@ -1,131 +1,3 @@
-#' Data Dictionary for `all_sessions`
-#'
-#' The `all_sessions_dd()` function generates a data dictionary based on the
-#' `all_sessions` table.
-#'
-#' @inheritParams all_sessions
-#'
-#' @return A `ptblank_informant` object.
-#'
-#' @export
-all_sessions_dd <- function(
-    size = c("small", "medium", "large", "xlarge"),
-    quality = c("perfect", "faulty"),
-    type = c("tibble", "data.frame", "duckdb")
-) {
-
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
-
-  formula <-
-    get_sj_tbl_read_fn(
-      name = "all_sessions",
-      size = size,
-      quality = quality,
-      type = type
-    )
-
-  pointblank::create_informant(
-    tbl = formula,
-    label = "All player sessions from *Super Jetroid*",
-    tbl_name = "all_sessions"
-  ) %>%
-    pointblank::info_tabular(
-      summary = "This table provides data for all player sessions. It also \\
-      contains summarized data for the number of revenue events (ad views and \\
-      IAP spends) and provides total revenue amounts (in USD) broken down by \\
-      type for each session.",
-      `each row is` = "A player session. Each session has a unique identifier \\
-      and every row contains pertinent information about player revenue \\
-      earned during the session.",
-      `data production` = "This table is revised consistently throughout the \\
-      day. Please visit our internal *Intendo* website to view status \\
-      reports on delayed data.",
-      `person responsible` = "C. Ellefson: +1 (416) 329-3702,
-      Central Engineering (((Downtown office)))"
-    ) %>%
-    pointblank::info_columns(
-      columns = "player_id",
-      info = "A unique identifier for a user/player.",
-      details = "Always composed of 12 *uppercase* letters followed \\
-      by 3 digits."
-    ) %>%
-    pointblank::info_columns(
-      columns = "session_id",
-      info = "A unique identifier for a player session.",
-      details = "Always composed of the `player_id` followed by a hyphen and \\
-      a random alphanumeric string of 8 characters (using lowercase letters)."
-    ) %>%
-    pointblank::info_columns(
-      columns = "session_start",
-      info = "The starting time of the session.",
-      details = "This is a datetime value \\
-      (in the [[YYYY-MM-DD hh-mm-ss]]<<color: steelblue;>> format) for when \\
-      a player (with `player_id`) logged into the game.",
-      details = ""
-    ) %>%
-    pointblank::info_columns(
-      columns = "session_duration",
-      info = "The length of the session (in minutes)."
-    ) %>%
-    pointblank::info_columns(
-      columns = "n_iap",
-      info = "The number of IAPs (in-app purchases) made by the player in \\
-      the session.",
-      details = "The value of an IAP varies widely and so a count only gives \\
-      an approximate measure of the daily spend velocity for a player."
-    ) %>%
-    pointblank::info_columns(
-      columns = "n_ads",
-      info = "The number of ads viewed by a player in the session.",
-      details = "The advertising SDK generally does a good job in tracking \\
-      the ad view upon completion (i.e., not logging out during the middle \\
-      of an ad) though there have been reports it is not perfect (based on \\
-      ad revenue actuals, collected up to a month later)."
-    ) %>%
-    pointblank::info_columns(
-      columns = "rev_iap",
-      info = "The estimated revenue generated in the session by a player \\
-      from IAPs.",
-      details = "The value is in USD and already deducts the 30% reserved \\
-      for the app stores. Players in other countries will pay in their local \\
-      currencies but we set all prices in USD in the two stores, taking into \\
-      account currency conversion and relative affordability across the \\
-      different regions."
-    ) %>%
-    pointblank::info_columns(
-      columns = "rev_ads",
-      info = "The estimated revenue earned across all ad views for a player \\
-      in the session.",
-      details = "This estimate is rough compared to IAPs, and we assign an \\
-      average value per ad view based on ad campaigns in play in certain \\
-      regions. These values are never replaced by actuals since payment is \\
-      bulk across all campaigns for inconsistent periods of time. In \\
-      practice, the difference between estimates and actuals will vary as \\
-      much as 30%."
-    ) %>%
-    pointblank::info_columns(
-      columns = "rev_all",
-      info = "The sum of `rev_iap_day` and `rev_ads_day` for a player in a \\
-      given session.",
-      details = "These values are based on estimates that only improve \\
-      slightly with time (through backfilling of IAP data). The more \\
-      uncertain component is the ad revenue."
-    ) %>%
-    pointblank::info_section(
-      section_name = "Further Details",
-      frequency = "Continuously updated",
-      `time of updates` = "Continuously updated",
-      `inception` = "2014-12-12"
-    ) %>%
-    pointblank::incorporate() %>%
-    pointblank::get_informant_report(
-      title = "Data Dictionary: `all_sessions`",
-      size = "600px"
-    )
-}
-
 #' Data Dictionary for `all_revenue`
 #'
 #' The `all_revenue_dd()` function generates a data dictionary based on the
@@ -628,6 +500,134 @@ user_summary_dd <- function(
     pointblank::incorporate() %>%
     pointblank::get_informant_report(
       title = "Data Dictionary: `user_summary`",
+      size = "600px"
+    )
+}
+
+#' Data Dictionary for `all_sessions`
+#'
+#' The `all_sessions_dd()` function generates a data dictionary based on the
+#' `all_sessions` table.
+#'
+#' @inheritParams all_sessions
+#'
+#' @return A `ptblank_informant` object.
+#'
+#' @export
+all_sessions_dd <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb")
+) {
+
+  size <- rlang::arg_match(size)
+  quality <- rlang::arg_match(quality)
+  type <- rlang::arg_match(type)
+
+  formula <-
+    get_sj_tbl_read_fn(
+      name = "all_sessions",
+      size = size,
+      quality = quality,
+      type = type
+    )
+
+  pointblank::create_informant(
+    tbl = formula,
+    label = "All player sessions from *Super Jetroid*",
+    tbl_name = "all_sessions"
+  ) %>%
+    pointblank::info_tabular(
+      summary = "This table provides data for all player sessions. It also \\
+      contains summarized data for the number of revenue events (ad views and \\
+      IAP spends) and provides total revenue amounts (in USD) broken down by \\
+      type for each session.",
+      `each row is` = "A player session. Each session has a unique identifier \\
+      and every row contains pertinent information about player revenue \\
+      earned during the session.",
+      `data production` = "This table is revised consistently throughout the \\
+      day. Please visit our internal *Intendo* website to view status \\
+      reports on delayed data.",
+      `person responsible` = "C. Ellefson: +1 (416) 329-3702,
+      Central Engineering (((Downtown office)))"
+    ) %>%
+    pointblank::info_columns(
+      columns = "player_id",
+      info = "A unique identifier for a user/player.",
+      details = "Always composed of 12 *uppercase* letters followed \\
+      by 3 digits."
+    ) %>%
+    pointblank::info_columns(
+      columns = "session_id",
+      info = "A unique identifier for a player session.",
+      details = "Always composed of the `player_id` followed by a hyphen and \\
+      a random alphanumeric string of 8 characters (using lowercase letters)."
+    ) %>%
+    pointblank::info_columns(
+      columns = "session_start",
+      info = "The starting time of the session.",
+      details = "This is a datetime value \\
+      (in the [[YYYY-MM-DD hh-mm-ss]]<<color: steelblue;>> format) for when \\
+      a player (with `player_id`) logged into the game.",
+      details = ""
+    ) %>%
+    pointblank::info_columns(
+      columns = "session_duration",
+      info = "The length of the session (in minutes)."
+    ) %>%
+    pointblank::info_columns(
+      columns = "n_iap",
+      info = "The number of IAPs (in-app purchases) made by the player in \\
+      the session.",
+      details = "The value of an IAP varies widely and so a count only gives \\
+      an approximate measure of the daily spend velocity for a player."
+    ) %>%
+    pointblank::info_columns(
+      columns = "n_ads",
+      info = "The number of ads viewed by a player in the session.",
+      details = "The advertising SDK generally does a good job in tracking \\
+      the ad view upon completion (i.e., not logging out during the middle \\
+      of an ad) though there have been reports it is not perfect (based on \\
+      ad revenue actuals, collected up to a month later)."
+    ) %>%
+    pointblank::info_columns(
+      columns = "rev_iap",
+      info = "The estimated revenue generated in the session by a player \\
+      from IAPs.",
+      details = "The value is in USD and already deducts the 30% reserved \\
+      for the app stores. Players in other countries will pay in their local \\
+      currencies but we set all prices in USD in the two stores, taking into \\
+      account currency conversion and relative affordability across the \\
+      different regions."
+    ) %>%
+    pointblank::info_columns(
+      columns = "rev_ads",
+      info = "The estimated revenue earned across all ad views for a player \\
+      in the session.",
+      details = "This estimate is rough compared to IAPs, and we assign an \\
+      average value per ad view based on ad campaigns in play in certain \\
+      regions. These values are never replaced by actuals since payment is \\
+      bulk across all campaigns for inconsistent periods of time. In \\
+      practice, the difference between estimates and actuals will vary as \\
+      much as 30%."
+    ) %>%
+    pointblank::info_columns(
+      columns = "rev_all",
+      info = "The sum of `rev_iap_day` and `rev_ads_day` for a player in a \\
+      given session.",
+      details = "These values are based on estimates that only improve \\
+      slightly with time (through backfilling of IAP data). The more \\
+      uncertain component is the ad revenue."
+    ) %>%
+    pointblank::info_section(
+      section_name = "Further Details",
+      frequency = "Continuously updated",
+      `time of updates` = "Continuously updated",
+      `inception` = "2014-12-12"
+    ) %>%
+    pointblank::incorporate() %>%
+    pointblank::get_informant_report(
+      title = "Data Dictionary: `all_sessions`",
       size = "600px"
     )
 }
