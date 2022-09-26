@@ -14,14 +14,14 @@ Description: This package provides four datasets from the 'Intendo' game
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Imports: 
     magrittr,
-    pointblank (>= 0.10.0),
-    rlang (>= 1.0.1)
+    pointblank (>= 0.11.1),
+    rlang (>= 1.0.5)
 Suggests: 
-    dplyr (>= 1.0.8),
+    dplyr (>= 1.0.10),
     testthat,
-    tibble (>= 3.1.6)
+    tibble (>= 3.1.8)
 Depends: 
     R (>= 3.5)
