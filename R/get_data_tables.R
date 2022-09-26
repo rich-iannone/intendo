@@ -1,52 +1,6 @@
 # Location of GitHub repo
 gh_repo_intendo <- "rich-iannone/intendo"
 
-#' All player sessions for Super Jetroid
-#'
-#' @description
-#' This table provides information on player sessions and summarizes the number
-#' of revenue events (ad views and IAP spends) and provides total revenue
-#' amounts (in USD) broken down by type for the session.
-#'
-#' @param size A keyword that allows getting different variants of the table
-#'   based on the size of player base. The default `"small"` table has the
-#'   lowest number of players/records. Increasing in size, we can also opt for
-#'   the `"medium"`, `"large"`, or `"xlarge"` versions.
-#' @param quality The data quality level of the returned dataset. There are two
-#'   options: (1) `"perfect"` provides a pristine table with no errors at all
-#'   and (2) `"faulty"` gives you a table with a multitude of errors.
-#' @param type The table return type. By default, this is a `"tibble"` but a
-#'   `"data.frame"` can instead be returned if using that keyword. If you have
-#'   the **duckdb** package installed, you can instead obtain the table as an
-#'   in-memory DuckDB database table.
-#' @param keep Should the downloaded data be stored on disk in the working
-#'   directory? By default, this is `FALSE`. If the file is available in the
-#'   next invocation then the data won't be downloaded again.
-#'
-#' @return A data table object, which could be a tibble (`tbl_df`) a data
-#'   frame, or an in-memory DuckDB table (`tbl_dbi`).
-#'
-#' @export
-all_sessions <- function(
-    size = c("small", "medium", "large", "xlarge"),
-    quality = c("perfect", "faulty"),
-    type = c("tibble", "data.frame", "duckdb"),
-    keep = FALSE
-) {
-
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
-
-  get_sj_tbl_from_gh_url(
-    name = "all_sessions",
-    size = size,
-    quality = quality,
-    type = type,
-    keep = keep
-  )
-}
-
 #' All revenue amounts for Super Jetroid
 #'
 #' @description
@@ -192,4 +146,50 @@ get_sj_tbl_from_gh_url <- function(
   }
 
   tbl_data
+}
+
+#' All player sessions for Super Jetroid
+#'
+#' @description
+#' This table provides information on player sessions and summarizes the number
+#' of revenue events (ad views and IAP spends) and provides total revenue
+#' amounts (in USD) broken down by type for the session.
+#'
+#' @param size A keyword that allows getting different variants of the table
+#'   based on the size of player base. The default `"small"` table has the
+#'   lowest number of players/records. Increasing in size, we can also opt for
+#'   the `"medium"`, `"large"`, or `"xlarge"` versions.
+#' @param quality The data quality level of the returned dataset. There are two
+#'   options: (1) `"perfect"` provides a pristine table with no errors at all
+#'   and (2) `"faulty"` gives you a table with a multitude of errors.
+#' @param type The table return type. By default, this is a `"tibble"` but a
+#'   `"data.frame"` can instead be returned if using that keyword. If you have
+#'   the **duckdb** package installed, you can instead obtain the table as an
+#'   in-memory DuckDB database table.
+#' @param keep Should the downloaded data be stored on disk in the working
+#'   directory? By default, this is `FALSE`. If the file is available in the
+#'   next invocation then the data won't be downloaded again.
+#'
+#' @return A data table object, which could be a tibble (`tbl_df`) a data
+#'   frame, or an in-memory DuckDB table (`tbl_dbi`).
+#'
+#' @export
+all_sessions <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb"),
+    keep = FALSE
+) {
+
+  size <- rlang::arg_match(size)
+  quality <- rlang::arg_match(quality)
+  type <- rlang::arg_match(type)
+
+  get_sj_tbl_from_gh_url(
+    name = "all_sessions",
+    size = size,
+    quality = quality,
+    type = type,
+    keep = keep
+  )
 }
