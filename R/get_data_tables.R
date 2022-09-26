@@ -7,16 +7,30 @@ gh_repo_intendo <- "rich-iannone/intendo"
 #' This summary table provides revenue data for every in-app purchase and ad
 #' view for players of Super Jetroid in 2015.
 #'
-#' @inheritParams all_sessions
+#' @param size A keyword that allows getting different variants of the table
+#'   based on the size of player base. The default `"small"` table has the
+#'   lowest number of players/records. Increasing in size, we can also opt for
+#'   the `"medium"`, `"large"`, or `"xlarge"` versions.
+#' @param quality The data quality level of the returned dataset. There are two
+#'   options: (1) `"perfect"` provides a pristine table with no errors at all
+#'   and (2) `"faulty"` gives you a table with a multitude of errors.
+#' @param type The table return type. By default, this is a `"tibble"` but a
+#'   `"data.frame"` can instead be returned if using that keyword. If you have
+#'   the **duckdb** package installed, you can instead obtain the table as an
+#'   in-memory DuckDB database table.
+#' @param keep Should the downloaded data be stored on disk in the working
+#'   directory? By default, this is `FALSE`. If the file is available in the
+#'   next invocation then the data won't be downloaded again.
 #'
 #' @return A data table object, which could be a tibble (`tbl_df`) a data
-#'   frame, or an in-memory DuckDB table (`tbl_dbi`).
+#'   frame, or an in-memory DuckDB table (`tbl_dbi`). If a CSV is written then
+#'   `TRUE` will be invisibly returned.
 #'
 #' @export
 all_revenue <- function(
     size = c("small", "medium", "large", "xlarge"),
     quality = c("perfect", "faulty"),
-    type = c("tibble", "data.frame", "duckdb"),
+    type = c("tibble", "data.frame", "duckdb", "csv"),
     keep = FALSE
 ) {
 
@@ -41,16 +55,17 @@ all_revenue <- function(
 #' played, number of IAPs bought and ads viewed, revenue gained, progression
 #' info, and some segmentation categories.
 #'
-#' @inheritParams all_sessions
+#' @inheritParams all_revenue
 #'
 #' @return A data table object, which could be a tibble (`tbl_df`) a data
-#'   frame, or an in-memory DuckDB table (`tbl_dbi`).
+#'   frame, or an in-memory DuckDB table (`tbl_dbi`). If a CSV is written then
+#'   `TRUE` will be invisibly returned.
 #'
 #' @export
 users_daily <- function(
     size = c("small", "medium", "large", "xlarge"),
     quality = c("perfect", "faulty"),
-    type = c("tibble", "data.frame", "duckdb"),
+    type = c("tibble", "data.frame", "duckdb", "csv"),
     keep = FALSE
 ) {
 
@@ -73,16 +88,17 @@ users_daily <- function(
 #' information here such as the first login/session time and some information
 #' useful for segmentation.
 #'
-#' @inheritParams all_sessions
+#' @inheritParams all_revenue
 #'
 #' @return A data table object, which could be a tibble (`tbl_df`) a data
-#'   frame, or an in-memory DuckDB table (`tbl_dbi`).
+#'   frame, or an in-memory DuckDB table (`tbl_dbi`). If a CSV is written then
+#'   `TRUE` will be invisibly returned.
 #'
 #' @export
 user_summary <- function(
     size = c("small", "medium", "large", "xlarge"),
     quality = c("perfect", "faulty"),
-    type = c("tibble", "data.frame", "duckdb"),
+    type = c("tibble", "data.frame", "duckdb", "csv"),
     keep = FALSE
 ) {
 
@@ -92,6 +108,40 @@ user_summary <- function(
 
   get_sj_tbl_from_gh_url(
     name = "user_summary",
+    size = size,
+    quality = quality,
+    type = type,
+    keep = keep
+  )
+}
+
+#' All player sessions for Super Jetroid
+#'
+#' @description
+#' This table provides information on player sessions and summarizes the number
+#' of revenue events (ad views and IAP spends) and provides total revenue
+#' amounts (in USD) broken down by type for the session.
+#'
+#' @inheritParams all_revenue
+#'
+#' @return A data table object, which could be a tibble (`tbl_df`) a data
+#'   frame, or an in-memory DuckDB table (`tbl_dbi`). If a CSV is written then
+#'   `TRUE` will be invisibly returned.
+#'
+#' @export
+all_sessions <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb", "csv"),
+    keep = FALSE
+) {
+
+  size <- rlang::arg_match(size)
+  quality <- rlang::arg_match(quality)
+  type <- rlang::arg_match(type)
+
+  get_sj_tbl_from_gh_url(
+    name = "all_sessions",
     size = size,
     quality = quality,
     type = type,
@@ -127,7 +177,7 @@ get_sj_tbl_from_gh_url <- function(
           repo = gh_repo_intendo,
           subdir = paste0("data-", size)
         ),
-        keep = keep
+        keep = if (type != "csv") keep else FALSE
       )
   }
 
@@ -143,53 +193,26 @@ get_sj_tbl_from_gh_url <- function(
         dbname = ":memory:",
         dbtype = "duckdb"
       )
+
+  } else if (type == "csv") {
+
+    write.csv(
+      tbl_data,
+      file = paste0(name, ".csv"),
+      na = "NA",
+      row.names = FALSE,
+      eol = "\n"
+    )
+
+    message(
+      paste0(
+        "The file `", paste0(name, ".csv"), "` was written to the ",
+        "working directory."
+      )
+    )
+
+    return(invisible(TRUE))
   }
 
   tbl_data
-}
-
-#' All player sessions for Super Jetroid
-#'
-#' @description
-#' This table provides information on player sessions and summarizes the number
-#' of revenue events (ad views and IAP spends) and provides total revenue
-#' amounts (in USD) broken down by type for the session.
-#'
-#' @param size A keyword that allows getting different variants of the table
-#'   based on the size of player base. The default `"small"` table has the
-#'   lowest number of players/records. Increasing in size, we can also opt for
-#'   the `"medium"`, `"large"`, or `"xlarge"` versions.
-#' @param quality The data quality level of the returned dataset. There are two
-#'   options: (1) `"perfect"` provides a pristine table with no errors at all
-#'   and (2) `"faulty"` gives you a table with a multitude of errors.
-#' @param type The table return type. By default, this is a `"tibble"` but a
-#'   `"data.frame"` can instead be returned if using that keyword. If you have
-#'   the **duckdb** package installed, you can instead obtain the table as an
-#'   in-memory DuckDB database table.
-#' @param keep Should the downloaded data be stored on disk in the working
-#'   directory? By default, this is `FALSE`. If the file is available in the
-#'   next invocation then the data won't be downloaded again.
-#'
-#' @return A data table object, which could be a tibble (`tbl_df`) a data
-#'   frame, or an in-memory DuckDB table (`tbl_dbi`).
-#'
-#' @export
-all_sessions <- function(
-    size = c("small", "medium", "large", "xlarge"),
-    quality = c("perfect", "faulty"),
-    type = c("tibble", "data.frame", "duckdb"),
-    keep = FALSE
-) {
-
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
-
-  get_sj_tbl_from_gh_url(
-    name = "all_sessions",
-    size = size,
-    quality = quality,
-    type = type,
-    keep = keep
-  )
 }
