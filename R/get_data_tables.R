@@ -1,4 +1,4 @@
-# Location of GitHub
+# Location of GitHub repo
 gh_repo_intendo <- "rich-iannone/intendo"
 
 #' All player sessions for Super Jetroid
@@ -27,10 +27,12 @@ gh_repo_intendo <- "rich-iannone/intendo"
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`).
 #'
 #' @export
-all_sessions <- function(size = c("small", "medium", "large", "xlarge"),
-                         quality = c("perfect", "faulty"),
-                         type = c("tibble", "data.frame", "duckdb"),
-                         keep = FALSE) {
+all_sessions <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb"),
+    keep = FALSE
+) {
 
   size <- rlang::arg_match(size)
   quality <- rlang::arg_match(quality)
@@ -57,10 +59,12 @@ all_sessions <- function(size = c("small", "medium", "large", "xlarge"),
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`).
 #'
 #' @export
-all_revenue <- function(size = c("small", "medium", "large", "xlarge"),
-                        quality = c("perfect", "faulty"),
-                        type = c("tibble", "data.frame", "duckdb"),
-                        keep = FALSE) {
+all_revenue <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb"),
+    keep = FALSE
+) {
 
   size <- rlang::arg_match(size)
   quality <- rlang::arg_match(quality)
@@ -89,10 +93,12 @@ all_revenue <- function(size = c("small", "medium", "large", "xlarge"),
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`).
 #'
 #' @export
-users_daily <- function(size = c("small", "medium", "large", "xlarge"),
-                        quality = c("perfect", "faulty"),
-                        type = c("tibble", "data.frame", "duckdb"),
-                        keep = FALSE) {
+users_daily <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb"),
+    keep = FALSE
+) {
 
   size <- rlang::arg_match(size)
   quality <- rlang::arg_match(quality)
@@ -119,10 +125,12 @@ users_daily <- function(size = c("small", "medium", "large", "xlarge"),
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`).
 #'
 #' @export
-user_summary <- function(size = c("small", "medium", "large", "xlarge"),
-                         quality = c("perfect", "faulty"),
-                         type = c("tibble", "data.frame", "duckdb"),
-                         keep = FALSE) {
+user_summary <- function(
+    size = c("small", "medium", "large", "xlarge"),
+    quality = c("perfect", "faulty"),
+    type = c("tibble", "data.frame", "duckdb"),
+    keep = FALSE
+) {
 
   size <- rlang::arg_match(size)
   quality <- rlang::arg_match(quality)
@@ -137,11 +145,13 @@ user_summary <- function(size = c("small", "medium", "large", "xlarge"),
   )
 }
 
-get_sj_tbl_from_gh_url <- function(name,
-                                   size,
-                                   quality,
-                                   type,
-                                   keep) {
+get_sj_tbl_from_gh_url <- function(
+    name,
+    size,
+    quality,
+    type,
+    keep
+) {
 
   file_name <-
     paste0(
