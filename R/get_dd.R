@@ -14,9 +14,11 @@ all_revenue_dd <- function(
     type = c("tibble", "data.frame", "duckdb")
 ) {
 
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
+  size <- match.arg(size)
+  quality <- match.arg(quality)
+  type <- match.arg(type)
+
+  check_pointblank()
 
   formula <-
     get_sj_tbl_read_fn(
@@ -170,9 +172,11 @@ users_daily_dd <- function(
     type = c("tibble", "data.frame", "duckdb")
 ) {
 
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
+  size <- match.arg(size)
+  quality <- match.arg(quality)
+  type <- match.arg(type)
+
+  check_pointblank()
 
   formula <-
     get_sj_tbl_read_fn(
@@ -419,9 +423,11 @@ user_summary_dd <- function(
     type = c("tibble", "data.frame", "duckdb")
 ) {
 
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
+  size <- match.arg(size)
+  quality <- match.arg(quality)
+  type <- match.arg(type)
+
+  check_pointblank()
 
   formula <-
     get_sj_tbl_read_fn(
@@ -520,9 +526,11 @@ all_sessions_dd <- function(
     type = c("tibble", "data.frame", "duckdb")
 ) {
 
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
+  size <- match.arg(size)
+  quality <- match.arg(quality)
+  type <- match.arg(type)
+
+  check_pointblank()
 
   formula <-
     get_sj_tbl_read_fn(
@@ -651,4 +659,16 @@ get_sj_tbl_read_fn <- function(name, size, quality, type) {
   args <- paste(args, collapse = ", ")
 
   stats::as.formula(paste0("~ intendo::", name, "(", args, ")"))
+}
+
+check_pointblank <- function() {
+
+  if (!requireNamespace("pointblank", quietly = TRUE)) {
+
+    stop(
+      "Obtaining a data dictionary requires the pointblank package:\n",
+      "* It can be installed with `install.packages(\"pointblank\")`.",
+      call. = FALSE
+    )
+  }
 }
