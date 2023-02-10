@@ -7,4 +7,5 @@
 ^README\.Rmd$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+tests/testthat/test-get_data_tables.R
 sj.*.rds
