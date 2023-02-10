@@ -34,9 +34,9 @@ all_revenue <- function(
     keep = FALSE
 ) {
 
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
+  size <- match.arg(size)
+  quality <- match.arg(quality)
+  type <- match.arg(type)
 
   get_sj_tbl_from_gh_url(
     name = "all_revenue",
@@ -69,9 +69,9 @@ users_daily <- function(
     keep = FALSE
 ) {
 
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
+  size <- match.arg(size)
+  quality <- match.arg(quality)
+  type <- match.arg(type)
 
   get_sj_tbl_from_gh_url(
     name = "users_daily",
@@ -102,9 +102,9 @@ user_summary <- function(
     keep = FALSE
 ) {
 
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
+  size <- match.arg(size)
+  quality <- match.arg(quality)
+  type <- match.arg(type)
 
   get_sj_tbl_from_gh_url(
     name = "user_summary",
@@ -136,9 +136,9 @@ all_sessions <- function(
     keep = FALSE
 ) {
 
-  size <- rlang::arg_match(size)
-  quality <- rlang::arg_match(quality)
-  type <- rlang::arg_match(type)
+  size <- match.arg(size)
+  quality <- match.arg(quality)
+  type <- match.arg(type)
 
   get_sj_tbl_from_gh_url(
     name = "all_sessions",
@@ -157,6 +157,36 @@ get_sj_tbl_from_gh_url <- function(
     keep
 ) {
 
+  if (type == "duckdb") {
+
+    if (!requireNamespace("duckdb", quietly = TRUE)) {
+
+      stop(
+        "Accessing a DuckDB table requires the duckdb package:\n",
+        "* It can be installed with `install.packages(\"duckdb\")`.",
+        call. = FALSE
+      )
+    }
+
+    if (!requireNamespace("dplyr", quietly = TRUE)) {
+
+      stop(
+        "Accessing a DuckDB table requires the dplyr package:\n",
+        "* It can be installed with `install.packages(\"dplyr\")`.",
+        call. = FALSE
+      )
+    }
+
+    if (!requireNamespace("DBI", quietly = TRUE)) {
+
+      stop(
+        "Accessing a DuckDB table requires the DBI package:\n",
+        "* It can be installed with `install.packages(\"DBI\")`.",
+        call. = FALSE
+      )
+    }
+  }
+
   file_name <-
     paste0(
       "sj_", name, "_", size,
@@ -164,21 +194,31 @@ get_sj_tbl_from_gh_url <- function(
       ".rds"
     )
 
-  if (file_name %in% list.files()) {
+  if (file_name %in% list.files(full.names = FALSE)) {
 
     tbl_data <- readRDS(file_name)
 
   } else {
 
-    tbl_data <-
-      pointblank::file_tbl(
-        file = pointblank::from_github(
-          file = file_name,
-          repo = gh_repo_intendo,
-          subdir = paste0("data-", size)
-        ),
-        keep = if (type != "csv") keep else FALSE
+    url <-
+      paste0(
+        "https://github.com/",
+        gh_repo_intendo,
+        "/raw/main/data-",
+        size, "/", file_name
       )
+
+    if (!keep) {
+
+      temp_dir <- tempdir()
+      file_path <- file.path(temp_dir, file_name)
+
+    } else {
+      file_path <- file_name
+    }
+
+    download_out <- download_remote_file(url = url, destfile = file_path)
+    tbl_data <- readRDS(file = file_path)
   }
 
   if (type == "data.frame") {
@@ -187,16 +227,24 @@ get_sj_tbl_from_gh_url <- function(
 
   } else if (type == "duckdb") {
 
-    tbl_data <-
-      pointblank::db_tbl(
-        table = tbl_data,
-        dbname = ":memory:",
-        dbtype = "duckdb"
-      )
+    # Create a connection for a DuckDB table
+    connection <- DBI::dbConnect(drv = duckdb::duckdb(), dbdir = ":memory:")
+
+    table_name <- sub(".rds", "", file_name)
+
+    # Copy the tabular data into the `connection` object
+    suppressWarnings(
+      tbl_data <-
+        dplyr::copy_to(
+          dest = connection,
+          df = tbl_data,
+          name = table_name
+        )
+    )
 
   } else if (type == "csv") {
 
-    write.csv(
+    utils::write.csv(
       tbl_data,
       file = paste0(name, ".csv"),
       na = "NA",
@@ -215,4 +263,66 @@ get_sj_tbl_from_gh_url <- function(
   }
 
   tbl_data
+}
+
+download_remote_file <- function(url, ...) {
+
+  if (grepl("^https?://", url)) {
+
+    is_r32 <- getRversion() >= "3.2"
+
+    if (.Platform$OS.type == "windows") {
+
+      if (is_r32) {
+
+        method <- "wininet"
+
+      } else {
+
+        seti2 <- utils::"setInternet2"
+        internet2_start <- seti2(NA)
+
+        if (!internet2_start) {
+
+          on.exit(suppressWarnings(seti2(internet2_start)))
+          suppressWarnings(seti2(TRUE))
+        }
+
+        method <- "internal"
+      }
+
+      suppressWarnings(utils::download.file(url, method = method, ...))
+
+    } else {
+
+      if (is_r32 && capabilities("libcurl")) {
+
+        method <- "libcurl"
+
+      } else if (nzchar(Sys.which("wget")[1])) {
+
+        method <- "wget"
+
+      } else if (nzchar(Sys.which("curl")[1])) {
+
+        method <- "curl"
+        orig_extra_options <- getOption("download.file.extra")
+
+        on.exit(options(download.file.extra = orig_extra_options))
+        options(download.file.extra = paste("-L", orig_extra_options))
+
+      } else if (nzchar(Sys.which("lynx")[1])) {
+
+        method <- "lynx"
+
+      } else {
+        stop("No download method can be found.")
+      }
+
+      utils::download.file(url, method = method, ...)
+    }
+
+  } else {
+    utils::download.file(url, ...)
+  }
 }
