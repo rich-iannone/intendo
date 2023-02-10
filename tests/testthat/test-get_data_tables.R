@@ -1,5 +1,3 @@
-skip_on_cran()
-
 test_that("getting the different data tables works", {
 
   #
