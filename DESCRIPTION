@@ -17,11 +17,12 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
-    magrittr,
-    pointblank (>= 0.11.1),
-    rlang (>= 1.0.5)
+    magrittr
 Suggests: 
-    dplyr (>= 1.0.10),
+    DBI (> 1.1.3),
+    dplyr (>= 1.1.0),
+    duckdb (>= 0.6.2),
+    pointblank (>= 0.11.3),
     testthat,
     tibble (>= 3.1.8)
 Depends: 
