@@ -1,3 +1,4 @@
+^\.github$
 ^data-raw$
 ^data-small$
 ^data-medium$
@@ -7,5 +8,6 @@
 ^README\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+man/figures/
 tests/testthat/test-get_data_tables.R
 sj.*.rds
