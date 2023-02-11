@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href='http://rich-iannone.github.io/intendo/'><img src="man/figures/logo.svg" height="350px"/></a>
+<a href='https://rich-iannone.github.io/intendo/'><img src="man/figures/logo.svg" height="350px"/></a>
 
 </div>
 
