@@ -4,7 +4,7 @@
 ^data-large$
 ^data-xlarge$
 ^LICENSE\.md$
-^README\.Rmd$
+^README\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 tests/testthat/test-get_data_tables.R
