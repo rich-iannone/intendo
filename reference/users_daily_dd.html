@@ -50,7 +50,7 @@ users_daily table."><meta property="og:image" content="/logo.svg"><!-- mathjax -
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">users_daily_dd</span><span class="op">(</span></span>
-<span>  size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"small"</span>, <span class="st">"medium"</span>, <span class="st">"large"</span>, <span class="st">"xlarge"</span><span class="op">)</span>,</span>
+<span>  size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"small"</span>, <span class="st">"medium"</span>, <span class="st">"large"</span>, <span class="st">"xlarge"</span>, <span class="st">"preview"</span><span class="op">)</span>,</span>
 <span>  quality <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"perfect"</span>, <span class="st">"faulty"</span><span class="op">)</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tibble"</span>, <span class="st">"data.frame"</span>, <span class="st">"duckdb"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -85,6 +85,35 @@ in-memory DuckDB database table.</p></dd>
 <p>A <code>ptblank_informant</code> object.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get a preview of the `users_daily` dataset</span></span></span>
+<span class="r-in"><span><span class="co"># with the 'preview' size option</span></span></span>
+<span class="r-in"><span><span class="fu">users_daily_dd</span><span class="op">(</span>size <span class="op">=</span> <span class="st">"preview"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 200 × 23</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    player_id  login_date sessi…¹ playt…² n_iap…³ n_ads…⁴ rev_i…⁵ rev_a…⁶ rev_a…⁷</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> SBPFOHCVM… 2015-01-01       1    34.9       1       4  13.5     0.18   13.7  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> YMKOHGVFZ… 2015-01-01       2    44.3       2       5  34.3     3.46   37.7  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> DLCKJEZRS… 2015-01-02       1     5.4       1       1   3.49    0.41    3.90 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> SBPFOHCVM… 2015-01-02       2    56.2       2       6  35.1     0.474  35.6  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> IGOFAEVXN… 2015-01-03       1    27.8       0       5   0       0.268   0.268</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> LKCUQHXDR… 2015-01-03       1    22.3       1       3   0.796   0.324   1.12 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> RNWFDZOSQ… 2015-01-03       1    10.1       1       2   5.49    0.42    5.91 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> SBPFOHCVM… 2015-01-03       2    32         1       2   4.49    0.078   4.57 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> SOBKUJPRE… 2015-01-03       1     8.5       1       1  11.6     0.342  11.9  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> TDRXCWIOZ… 2015-01-03       2    37.3       1       5   5.49    3.11    8.60 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 190 more rows, 14 more variables: start_day &lt;date&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   sessions_total &lt;int&gt;, playtime_total &lt;dbl&gt;, level_reached &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   in_ftue &lt;lgl&gt;, at_eoc &lt;lgl&gt;, is_customer &lt;lgl&gt;, n_iap_total &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   n_ads_total &lt;int&gt;, rev_iap_total &lt;dbl&gt;, rev_ads_total &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   rev_all_total &lt;dbl&gt;, country &lt;chr&gt;, acquisition &lt;chr&gt;, and abbreviated</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   variable names ¹​sessions_day, ²​playtime_day, ³​n_iap_day, ⁴​n_ads_day,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁵​rev_iap_day, ⁶​rev_ads_day, ⁷​rev_all_day</span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
