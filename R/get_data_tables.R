@@ -26,9 +26,15 @@ gh_repo_intendo <- "rich-iannone/intendo"
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`). If a CSV is written then
 #'   `TRUE` will be invisibly returned.
 #'
+#' @examples
+#'
+#' # Get a preview of the `all_revenue` dataset
+#' # with the 'preview' size option
+#' all_revenue(size = "preview")
+#'
 #' @export
 all_revenue <- function(
-    size = c("small", "medium", "large", "xlarge"),
+    size = c("small", "medium", "large", "xlarge", "preview"),
     quality = c("perfect", "faulty"),
     type = c("tibble", "data.frame", "duckdb", "csv"),
     keep = FALSE
@@ -37,6 +43,10 @@ all_revenue <- function(
   size <- match.arg(size)
   quality <- match.arg(quality)
   type <- match.arg(type)
+
+  if (size == "preview") {
+    return(all_revenue_preview)
+  }
 
   get_sj_tbl_from_gh_url(
     name = "all_revenue",
@@ -61,9 +71,15 @@ all_revenue <- function(
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`). If a CSV is written then
 #'   `TRUE` will be invisibly returned.
 #'
+#' @examples
+#'
+#' # Get a preview of the `users_daily` dataset
+#' # with the 'preview' size option
+#' users_daily(size = "preview")
+#'
 #' @export
 users_daily <- function(
-    size = c("small", "medium", "large", "xlarge"),
+    size = c("small", "medium", "large", "xlarge", "preview"),
     quality = c("perfect", "faulty"),
     type = c("tibble", "data.frame", "duckdb", "csv"),
     keep = FALSE
@@ -72,6 +88,10 @@ users_daily <- function(
   size <- match.arg(size)
   quality <- match.arg(quality)
   type <- match.arg(type)
+
+  if (size == "preview") {
+    return(users_daily_preview)
+  }
 
   get_sj_tbl_from_gh_url(
     name = "users_daily",
@@ -94,9 +114,15 @@ users_daily <- function(
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`). If a CSV is written then
 #'   `TRUE` will be invisibly returned.
 #'
+#' @examples
+#'
+#' # Get a preview of the `user_summary` dataset
+#' # with the 'preview' size option
+#' user_summary(size = "preview")
+#'
 #' @export
 user_summary <- function(
-    size = c("small", "medium", "large", "xlarge"),
+    size = c("small", "medium", "large", "xlarge", "preview"),
     quality = c("perfect", "faulty"),
     type = c("tibble", "data.frame", "duckdb", "csv"),
     keep = FALSE
@@ -105,6 +131,10 @@ user_summary <- function(
   size <- match.arg(size)
   quality <- match.arg(quality)
   type <- match.arg(type)
+
+  if (size == "preview") {
+    return(user_summary_preview)
+  }
 
   get_sj_tbl_from_gh_url(
     name = "user_summary",
@@ -128,9 +158,15 @@ user_summary <- function(
 #'   frame, or an in-memory DuckDB table (`tbl_dbi`). If a CSV is written then
 #'   `TRUE` will be invisibly returned.
 #'
+#' @examples
+#'
+#' # Get a preview of the `all_sessions` dataset
+#' # with the 'preview' size option
+#' all_sessions(size = "preview")
+#'
 #' @export
 all_sessions <- function(
-    size = c("small", "medium", "large", "xlarge"),
+    size = c("small", "medium", "large", "xlarge", "preview"),
     quality = c("perfect", "faulty"),
     type = c("tibble", "data.frame", "duckdb", "csv"),
     keep = FALSE
@@ -139,6 +175,10 @@ all_sessions <- function(
   size <- match.arg(size)
   quality <- match.arg(quality)
   type <- match.arg(type)
+
+  if (size == "preview") {
+    return(all_sessions_preview)
+  }
 
   get_sj_tbl_from_gh_url(
     name = "all_sessions",
