@@ -5,7 +5,7 @@
 \title{All player sessions for Super Jetroid}
 \usage{
 all_sessions(
-  size = c("small", "medium", "large", "xlarge"),
+  size = c("small", "medium", "large", "xlarge", "preview"),
   quality = c("perfect", "faulty"),
   type = c("tibble", "data.frame", "duckdb", "csv"),
   keep = FALSE
@@ -39,4 +39,11 @@ frame, or an in-memory DuckDB table (\code{tbl_dbi}). If a CSV is written then
 This table provides information on player sessions and summarizes the number
 of revenue events (ad views and IAP spends) and provides total revenue
 amounts (in USD) broken down by type for the session.
+}
+\examples{
+
+# Get a preview of the `all_sessions` dataset
+# with the 'preview' size option
+all_sessions(size = "preview")
+
 }

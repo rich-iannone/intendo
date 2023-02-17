@@ -5,7 +5,7 @@
 \title{Daily users playing Super Jetroid}
 \usage{
 users_daily(
-  size = c("small", "medium", "large", "xlarge"),
+  size = c("small", "medium", "large", "xlarge", "preview"),
   quality = c("perfect", "faulty"),
   type = c("tibble", "data.frame", "duckdb", "csv"),
   keep = FALSE
@@ -40,4 +40,11 @@ This summary table provides daily totals for every player that had at least
 one login/session in a day. We get measures such as daily sessions, time
 played, number of IAPs bought and ads viewed, revenue gained, progression
 info, and some segmentation categories.
+}
+\examples{
+
+# Get a preview of the `users_daily` dataset
+# with the 'preview' size option
+users_daily(size = "preview")
+
 }

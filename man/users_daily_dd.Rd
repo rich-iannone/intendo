@@ -5,7 +5,7 @@
 \title{Data Dictionary for \code{users_daily}}
 \usage{
 users_daily_dd(
-  size = c("small", "medium", "large", "xlarge"),
+  size = c("small", "medium", "large", "xlarge", "preview"),
   quality = c("perfect", "faulty"),
   type = c("tibble", "data.frame", "duckdb")
 )
@@ -31,4 +31,11 @@ A \code{ptblank_informant} object.
 \description{
 The \code{users_daily_dd()} function generates a data dictionary based on the
 \code{users_daily} table.
+}
+\examples{
+
+# Get a preview of the `users_daily` dataset
+# with the 'preview' size option
+users_daily_dd(size = "preview")
+
 }

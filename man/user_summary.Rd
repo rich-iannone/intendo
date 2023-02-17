@@ -5,7 +5,7 @@
 \title{User summaries for Super Jetroid}
 \usage{
 user_summary(
-  size = c("small", "medium", "large", "xlarge"),
+  size = c("small", "medium", "large", "xlarge", "preview"),
   quality = c("perfect", "faulty"),
   type = c("tibble", "data.frame", "duckdb", "csv"),
   keep = FALSE
@@ -39,4 +39,11 @@ frame, or an in-memory DuckDB table (\code{tbl_dbi}). If a CSV is written then
 This summary table provides information on each user. We get
 information here such as the first login/session time and some information
 useful for segmentation.
+}
+\examples{
+
+# Get a preview of the `user_summary` dataset
+# with the 'preview' size option
+user_summary(size = "preview")
+
 }

@@ -5,7 +5,7 @@
 \title{Data Dictionary for \code{all_sessions}}
 \usage{
 all_sessions_dd(
-  size = c("small", "medium", "large", "xlarge"),
+  size = c("small", "medium", "large", "xlarge", "preview"),
   quality = c("perfect", "faulty"),
   type = c("tibble", "data.frame", "duckdb")
 )
@@ -31,4 +31,11 @@ A \code{ptblank_informant} object.
 \description{
 The \code{all_sessions_dd()} function generates a data dictionary based on the
 \code{all_sessions} table.
+}
+\examples{
+
+# Get a preview of the `all_sessions` dataset
+# with the 'preview' size option
+all_sessions_dd(size = "preview")
+
 }

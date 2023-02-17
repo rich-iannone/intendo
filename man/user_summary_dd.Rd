@@ -5,7 +5,7 @@
 \title{Data Dictionary for \code{user_summary}}
 \usage{
 user_summary_dd(
-  size = c("small", "medium", "large", "xlarge"),
+  size = c("small", "medium", "large", "xlarge", "preview"),
   quality = c("perfect", "faulty"),
   type = c("tibble", "data.frame", "duckdb")
 )
@@ -28,4 +28,11 @@ in-memory DuckDB database table.}
 \description{
 The \code{user_summary_dd()} function generates a data dictionary based on the
 \code{user_summary} table.
+}
+\examples{
+
+# Get a preview of the `user_summary` dataset
+# with the 'preview' size option
+user_summary_dd(size = "preview")
+
 }

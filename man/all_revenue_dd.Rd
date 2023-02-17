@@ -5,7 +5,7 @@
 \title{Data Dictionary for \code{all_revenue}}
 \usage{
 all_revenue_dd(
-  size = c("small", "medium", "large", "xlarge"),
+  size = c("small", "medium", "large", "xlarge", "preview"),
   quality = c("perfect", "faulty"),
   type = c("tibble", "data.frame", "duckdb")
 )
@@ -31,4 +31,11 @@ A \code{ptblank_informant} object.
 \description{
 The \code{all_revenue_dd()} function generates a data dictionary based on the
 \code{all_revenue} table.
+}
+\examples{
+
+# Get a preview of the `all_revenue` dataset
+# with the 'preview' size option
+all_revenue_dd(size = "preview")
+
 }

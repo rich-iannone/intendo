@@ -5,7 +5,7 @@
 \title{All revenue amounts for Super Jetroid}
 \usage{
 all_revenue(
-  size = c("small", "medium", "large", "xlarge"),
+  size = c("small", "medium", "large", "xlarge", "preview"),
   quality = c("perfect", "faulty"),
   type = c("tibble", "data.frame", "duckdb", "csv"),
   keep = FALSE
@@ -38,4 +38,11 @@ frame, or an in-memory DuckDB table (\code{tbl_dbi}). If a CSV is written then
 \description{
 This summary table provides revenue data for every in-app purchase and ad
 view for players of Super Jetroid in 2015.
+}
+\examples{
+
+# Get a preview of the `all_revenue` dataset
+# with the 'preview' size option
+all_revenue(size = "preview")
+
 }
