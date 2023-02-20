@@ -567,6 +567,8 @@ users_daily_dd <- function(
 #'
 #' @inheritParams all_sessions
 #'
+#' @return A `ptblank_informant` object.
+#'
 #' @examples
 #'
 #' # Get a preview of the `user_summary` dataset
