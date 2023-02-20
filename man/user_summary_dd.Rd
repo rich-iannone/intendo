@@ -25,6 +25,9 @@ and (2) \code{"faulty"} gives you a table with a multitude of errors.}
 the \strong{duckdb} package installed, you can instead obtain the table as an
 in-memory DuckDB database table.}
 }
+\value{
+A \code{ptblank_informant} object.
+}
 \description{
 The \code{user_summary_dd()} function generates a data dictionary based on the
 \code{user_summary} table.
