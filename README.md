@@ -21,9 +21,19 @@ These datasets, in all their variations, can be useful for practicing with data 
 
 ## Installation
 
-You can install the development version of **intendo** from [GitHub](https://github.com/) with:
+You can install **intendo** from **CRAN** with:
 
 ``` r
-# install.packages("devtools")
+install.packages("intendo")
+```
+
+You can also install the development version of **intendo** from **GitHub**:
+
+``` r
 devtools::install_github("rich-iannone/intendo")
 ```
+
+## Code of Conduct
+
+Please note that the intendo project is released with a [contributor
+code of conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/).<br>By participating in this project you agree to abide by its terms.
