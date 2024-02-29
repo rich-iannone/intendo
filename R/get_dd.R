@@ -514,7 +514,7 @@ users_daily_dd <- function(
   informant <-
     pointblank::info_columns(
       informant,
-      columns = pointblank::matches("rev_[a-z]{3}_total"),
+      columns = c("rev_iap_total", "rev_ads_total", "rev_all_total"),
       info = "Amounts are in USD."
     )
 
