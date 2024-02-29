@@ -1,4 +1,4 @@
-# intendo (development version)
+# intendo 0.1.1
 
 # intendo 0.1
 
